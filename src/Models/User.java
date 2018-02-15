@@ -9,7 +9,8 @@ public class User {
     private String firstname;
     private String lastname;
 
-    public User() {
+    public User()
+    {
         setId(0);
         setFirstname("");
         setLastname("");
@@ -17,13 +18,24 @@ public class User {
         setPassword("");
     }
 
-    public User(int id, String username, String password, String email, String firstname, String lastname) {
+    public User(int id, String username, String password, String email, String firstname, String lastname)
+    {
         setId(id);
         setUsername(username);
         setPassword(password);
         setEmail(email);
         setFirstname(firstname);
         setLastname(lastname);
+    }
+
+    public User(int id, String firstname, String lastname, String username)
+    {
+        setId(id);
+        setFirstname(firstname);
+        setLastname(lastname);
+        setUsername(username);
+        setPassword("");
+        setEmail("");
     }
 
     public int getId() {

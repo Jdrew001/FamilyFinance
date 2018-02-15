@@ -25,13 +25,19 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="a0792f5a-4daf-4a32-a78b-f6b0e5f94b1f">
-        <schema name="familyfinance" object-types="function, procedure, table, view" />
+        <schema name="familyfinance" object-types="argument, column, constraint, function, index, procedure, table, dataset trigger, view" />
       </connection>
     </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="a0792f5a-4daf-4a32-a78b-f6b0e5f94b1f">
-      <console name="Family Finance" type="STANDARD"><![CDATA[call get_all_users();]]></console>
+      <console name="Family Finance" type="STANDARD"><![CDATA[call create_category('Gas');
+
+call get_all_categories();
+
+call add_income(25.00, 1, '2018-02-18', 1, 2);
+
+call get_income_by_month('2018-02-18');]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
@@ -56,7 +62,9 @@
     <filters />
   </component>
   <component name="DBNavigator.Project.ScriptExecutionManager" clear-outputs="true">
-    <recently-used-interfaces />
+    <recently-used-interfaces>
+      <mapping database-type="MYSQL" interface-id="DEFAULT" />
+    </recently-used-interfaces>
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
