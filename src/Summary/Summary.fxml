@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="684.0" prefWidth="1028.0" style="-fx-background-color: #e2e2e2;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Summary.SummaryController">
    <top>
       <VBox prefHeight="106.0" prefWidth="1028.0" style="-fx-background-color: #605f5e;" BorderPane.alignment="CENTER">
@@ -27,7 +26,7 @@
                      <children>
                         <JFXToolbar prefHeight="51.0" prefWidth="201.0">
                            <center>
-                              <JFXButton fx:id="logoutBtn" contentDisplay="CENTER" prefHeight="24.0" prefWidth="87.0" style="-fx-background-color: #e2e2e2;" text="logout" textAlignment="CENTER" textFill="#247ba0" BorderPane.alignment="CENTER">
+                              <JFXButton fx:id="logoutBtn" contentDisplay="CENTER" onMouseClicked="#logout" prefHeight="24.0" prefWidth="87.0" style="-fx-background-color: #e2e2e2;" text="logout" textAlignment="CENTER" textFill="#247ba0" BorderPane.alignment="CENTER">
                                  <font>
                                     <Font name="Nirmala UI Bold" size="11.0" />
                                  </font>
