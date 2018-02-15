@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="684.0" prefWidth="1028.0" style="-fx-background-color: #e2e2e2;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.LoginController">
+   <center>
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="716.0" spacing="80.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" prefHeight="69.0" prefWidth="322.0" style="-fx-text-fill: #247ba0;" text="Family Finance" textFill="#0a2463">
+               <font>
+                  <Font name="Roboto Medium" size="34.0" />
+               </font>
+            </Label>
+            <JFXTextField fx:id="usernameTxt" maxWidth="-Infinity" prefHeight="40.0" prefWidth="362.0" promptText="Username" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <font>
+                  <Font name="Nirmala UI Semilight" size="20.0" />
+               </font>
+            </JFXTextField>
+            <JFXPasswordField fx:id="passwordTxt" maxWidth="-Infinity" prefHeight="40.0" prefWidth="368.0" promptText="Password" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font name="Nirmala UI Semilight" size="20.0" />
+               </font>
+            </JFXPasswordField>
+            <JFXButton fx:id="loginBtn" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#login" prefHeight="45.0" prefWidth="258.0" style="-jfx-button-type: RAISED; -fx-background-color: #247ba0;" text="Login" textFill="WHITE">
+               <font>
+                  <Font name="Material Icons" size="30.0" />
+               </font>
+            </JFXButton>
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+      </VBox>
+   </center>
+</BorderPane>
