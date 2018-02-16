@@ -6,8 +6,7 @@ import Models.User;
 import Income.IncomeController;
 import Repositories.IncomeRepository;
 import com.jfoenix.controls.JFXButton;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import com.jfoenix.controls.JFXDatePicker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
+import java.time.ZoneId;
 import java.util.Date;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
@@ -30,18 +30,13 @@ public class SummaryController implements Initializable {
     JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn;
 
     @FXML
+    JFXDatePicker incomeDatePicker, expenseDatePicker;
+
+    @FXML
     TableView financeTable;
 
     @FXML
-    Label beginningBalLbl;
-    @FXML
-    Label totalIncomeLbl;
-    @FXML
-    Label totalExpenseLbl;
-    @FXML
-    Label totalSavingsLbl;
-    @FXML
-    Label cashBalLbl;
+    Label beginningBalLbl, totalIncomeLbl, totalExpenseLbl, totalSavingsLbl, cashBalLbl;
 
     //panes
     @FXML
@@ -51,7 +46,6 @@ public class SummaryController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         IncomeRepository incomeRepository = new IncomeRepository();
         incomeAmount();
-        incomeController.initializeTable(financeTable);
     }
 
     public void logout() {
@@ -59,7 +53,7 @@ public class SummaryController implements Initializable {
         s.changeScene(logoutBtn, "../login/login.fxml", "Login");
     }
 
-    //Changing the view panes
+    //Changing the view panes -- NAVIGATION
     @FXML
     public void handleButtonAction(ActionEvent e)
     {
@@ -70,6 +64,21 @@ public class SummaryController implements Initializable {
 
         } else if (e.getSource() == incomeBtn) {
             financePane.toFront();
+
+        }
+    }
+
+    //wire up the datepicker
+    @FXML
+    public void handleDatePicker(ActionEvent e)
+    {
+        if(e.getSource().equals(incomeDatePicker))
+        {
+            financeTable.getColumns().clear();
+            Date date = Date.from(incomeDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            incomeController.initializeTable(financeTable, incomeController.loadIncome(date));
+
+        } else if(e.getSource().equals(expenseDatePicker)) {
 
         }
     }

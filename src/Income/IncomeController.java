@@ -1,27 +1,17 @@
 package Income;
 
-import Business.DecimalColumnFactory;
-import Models.Category;
 import Models.Income;
-import Models.TransactionType;
-import Models.User;
 import Repositories.IncomeRepository;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.Property;
-import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.Date;
 
 public class IncomeController {
@@ -49,7 +39,13 @@ public class IncomeController {
         return incomes;
     }
 
-    public void initializeTable(TableView table)
+    public ObservableList<Income> loadIncome(Date date) {
+        incomes.clear();
+        incomes = incomeRepository.getIncomeByMonth(date);
+        return incomes;
+    }
+
+    public void initializeTable(TableView table, ObservableList<Income> incomes)
     {
         table.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
             @Override
@@ -57,7 +53,6 @@ public class IncomeController {
                 return true;
             }
         });
-        ObservableList<Income> incomes = loadIncome();
         table.setEditable(false);
         TableColumn<Income, Number> amountCol = new TableColumn<>("amount");
         amountCol.setMinWidth(200);
@@ -76,12 +71,6 @@ public class IncomeController {
             }
         });
 
-
-
-
-        amountCol.getCellFactory();
-
-
         TableColumn date = new TableColumn("Date");
         date.setMinWidth(200);
         date.setCellValueFactory(new PropertyValueFactory<Income, Date>("date"));
@@ -96,7 +85,7 @@ public class IncomeController {
         transaction.setMinWidth(200);
 
 
-        table.setItems(loadIncome());
+        table.setItems(incomes);
         table.getColumns().addAll(amountCol, date, username, category, transaction);
     }
 }
