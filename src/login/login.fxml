@@ -1,45 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXPasswordField?>
-<?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.geometry.Insets?>
+<?import com.jfoenix.controls.JFXToolbar?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="684.0" prefWidth="1028.0" style="-fx-background-color: #e2e2e2;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.LoginController">
-   <center>
-      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="716.0" spacing="80.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label alignment="CENTER" prefHeight="69.0" prefWidth="322.0" style="-fx-text-fill: #247ba0;" text="Family Finance" textFill="#0a2463">
-               <font>
-                  <Font name="Roboto Medium" size="34.0" />
-               </font>
-            </Label>
-            <JFXTextField fx:id="usernameTxt" maxWidth="-Infinity" prefHeight="40.0" prefWidth="362.0" promptText="Username" VBox.vgrow="ALWAYS">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <font>
-                  <Font name="Nirmala UI Semilight" size="20.0" />
-               </font>
-            </JFXTextField>
-            <JFXPasswordField fx:id="passwordTxt" maxWidth="-Infinity" prefHeight="40.0" prefWidth="368.0" promptText="Password" VBox.vgrow="ALWAYS">
-               <font>
-                  <Font name="Nirmala UI Semilight" size="20.0" />
-               </font>
-            </JFXPasswordField>
-            <JFXButton fx:id="loginBtn" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#login" prefHeight="45.0" prefWidth="258.0" style="-jfx-button-type: RAISED; -fx-background-color: #247ba0;" text="Login" textFill="WHITE">
-               <font>
-                  <Font name="Material Icons" size="30.0" />
-               </font>
-            </JFXButton>
-         </children>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-      </VBox>
-   </center>
-</BorderPane>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #2c3e50;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.LoginController">
+   <children>
+      <JFXButton fx:id="loginBtn" buttonType="RAISED" layoutX="294.0" layoutY="469.0" onMouseClicked="#login" prefHeight="54.0" prefWidth="212.0" style="-fx-background-color: #3498db;" text="Login" textFill="#2c3e50" AnchorPane.leftAnchor="294.0" AnchorPane.rightAnchor="294.0" />
+      <Label layoutX="238.0" layoutY="215.0" prefHeight="45.0" prefWidth="218.0" text="   Username" textFill="#3498db">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font></Label>
+      <Label layoutX="238.0" layoutY="322.0" prefHeight="45.0" prefWidth="218.0" text="   Password" textFill="#3498db">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <TextField fx:id="usernameTxt" layoutX="242.0" layoutY="255.0" prefHeight="45.0" prefWidth="316.0" style="-fx-background-color: #2c3e50;" styleClass="input-field" stylesheets="@../Resources/stylesheet.css" AnchorPane.leftAnchor="242.0" AnchorPane.rightAnchor="242.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </TextField>
+      <PasswordField fx:id="passwordTxt" layoutX="238.0" layoutY="380.0" prefHeight="45.0" prefWidth="316.0" style="-fx-background-color: #2c3e50;" styleClass="input-field" stylesheets="@../Resources/stylesheet.css" AnchorPane.leftAnchor="238.0" AnchorPane.rightAnchor="246.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </PasswordField>
+      <JFXToolbar prefHeight="187.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <ImageView fitHeight="213.0" fitWidth="356.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../Resources/Background.png" />
+               </image>
+            </ImageView>
+         </center>
+      </JFXToolbar>
+   </children>
+</AnchorPane>

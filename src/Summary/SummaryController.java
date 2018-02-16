@@ -3,13 +3,17 @@ package Summary;
 import Business.SceneChanger;
 import Models.Income;
 import Models.User;
+import Income.IncomeController;
 import Repositories.IncomeRepository;
 import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
@@ -19,16 +23,15 @@ import java.util.ResourceBundle;
 
 public class SummaryController implements Initializable {
 
+    //load in all controllers
+    IncomeController incomeController = new IncomeController();
+
     @FXML
-    JFXButton logoutBtn;
+    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn;
+
     @FXML
-    JFXButton incomeBtn;
-    @FXML
-    JFXButton expensesBtn;
-    @FXML
-    JFXButton journalBtn;
-    @FXML
-    JFXButton categoriesBtn;
+    TableView financeTable;
+
     @FXML
     Label beginningBalLbl;
     @FXML
@@ -40,18 +43,15 @@ public class SummaryController implements Initializable {
     @FXML
     Label cashBalLbl;
 
-    public ObservableList<Income> incomes =  FXCollections.observableArrayList();
-    double totalIncomeAmount = 0.0;
+    //panes
+    @FXML
+    AnchorPane summaryPane, financePane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         IncomeRepository incomeRepository = new IncomeRepository();
-        System.out.println(incomeRepository.deleteIncome(5));
         incomeAmount();
-
-
-
-
+        incomeController.initializeTable(financeTable);
     }
 
     public void logout() {
@@ -59,18 +59,25 @@ public class SummaryController implements Initializable {
         s.changeScene(logoutBtn, "../login/login.fxml", "Login");
     }
 
+    //Changing the view panes
+    @FXML
+    public void handleButtonAction(ActionEvent e)
+    {
+        System.out.println(e.getSource());
+        if(e.getSource() == summaryBtn)
+        {
+            summaryPane.toFront();
+
+        } else if (e.getSource() == incomeBtn) {
+            financePane.toFront();
+
+        }
+    }
+
     private void incomeAmount()
     {
-        IncomeRepository incomeRepository = new IncomeRepository();
-        incomes = incomeRepository.getIncomeByMonth(new Date());
-
-        for(Income income : incomes)
-        {
-            totalIncomeAmount += income.getAmount();
-        }
-
-        System.out.println(totalIncomeAmount);
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        double totalIncomeAmount = incomeController.getIncomeAmount();
 
         if(totalIncomeAmount > 0)
             totalIncomeLbl.setTextFill(Color.GREEN);

@@ -1,155 +1,259 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXToolbar?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="684.0" prefWidth="1028.0" style="-fx-background-color: #e2e2e2;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Summary.SummaryController">
-   <top>
-      <VBox prefHeight="106.0" prefWidth="1028.0" style="-fx-background-color: #605f5e;" BorderPane.alignment="CENTER">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #2c3e50;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Summary.SummaryController">
+   <children>
+      <Pane prefHeight="800.0" prefWidth="256.0" style="-fx-background-color: #2980b9;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <JFXToolbar prefHeight="51.0" prefWidth="1028.0" style="-fx-background-color: #247ba0;">
-               <left>
-                  <Label alignment="CENTER" prefHeight="53.0" prefWidth="174.0" text="Summary" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
+            <ImageView fitHeight="77.0" fitWidth="73.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Resources/logo.png" />
+               </image>
+            </ImageView>
+            <JFXButton fx:id="summaryBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="-19.0" layoutY="73.0" onAction="#handleButtonAction" prefHeight="63.0" prefWidth="277.0" style="-fx-background-color: #2c3e50; -fx-background-radius: 0;" text="Summary" textAlignment="CENTER" textFill="#ecf0f1">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <effect>
+                  <Glow level="0.02" />
+               </effect>
+            </JFXButton>
+            <ImageView fitHeight="45.0" fitWidth="39.0" layoutX="17.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Resources/ic_account_balance_white_24dp_2x.png" />
+               </image>
+            </ImageView>
+            <JFXButton fx:id="incomeBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="-19.0" layoutY="136.0" onAction="#handleButtonAction" prefHeight="63.0" prefWidth="277.0" style="-fx-background-color: #2c3e50; -fx-background-radius: 0;" text="Incomes" textAlignment="CENTER" textFill="#ecf0f1">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <effect>
+                  <Glow level="0.02" />
+               </effect>
+            </JFXButton>
+            <ImageView fitHeight="45.0" fitWidth="39.0" layoutX="17.0" layoutY="148.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Resources/ic_trending_up_white_24dp_2x.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="73.0" layoutY="6.0" prefHeight="63.0" prefWidth="175.0" text="Family Finance" textFill="#2c3e50">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <JFXButton fx:id="expensesBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="-19.0" layoutY="199.0" onAction="#handleButtonAction" prefHeight="63.0" prefWidth="277.0" style="-fx-background-color: #2c3e50; -fx-background-radius: 0;" text="Expenses" textFill="#ecf0f1">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <effect>
+                  <Glow level="0.02" />
+               </effect>
+            </JFXButton>
+            <ImageView fitHeight="45.0" fitWidth="39.0" layoutX="17.0" layoutY="211.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Resources/ic_trending_down_white_24dp_2x.png" />
+               </image>
+            </ImageView>
+            <JFXButton fx:id="journalBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="-19.0" layoutY="262.0" onAction="#handleButtonAction" prefHeight="63.0" prefWidth="277.0" style="-fx-background-color: #2c3e50; -fx-background-radius: 0;" text="Journal Entries" textFill="#ecf0f1">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <effect>
+                  <Glow level="0.02" />
+               </effect>
+            </JFXButton>
+            <ImageView fitHeight="45.0" fitWidth="39.0" layoutX="17.0" layoutY="274.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Resources/ic_receipt_white_24dp_2x.png" />
+               </image>
+            </ImageView>
+            <JFXButton alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="-19.0" layoutY="325.0" onAction="#handleButtonAction" prefHeight="63.0" prefWidth="277.0" style="-fx-background-color: #2c3e50; -fx-background-radius: 0;" text="Budget Goals" textFill="#ecf0f1">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <effect>
+                  <Glow level="0.02" />
+               </effect>
+            </JFXButton>
+            <ImageView fitHeight="45.0" fitWidth="39.0" layoutX="17.0" layoutY="337.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Resources/ic_payment_white_24dp_2x.png" />
+               </image>
+            </ImageView>
+            <JFXButton fx:id="categoriesBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="-19.0" layoutY="388.0" onAction="#handleButtonAction" prefHeight="63.0" prefWidth="277.0" style="-fx-background-color: #2c3e50; -fx-background-radius: 0;" text="Categories" textFill="#ecf0f1">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <effect>
+                  <Glow level="0.02" />
+               </effect>
+            </JFXButton>
+            <ImageView fitHeight="45.0" fitWidth="39.0" layoutX="17.0" layoutY="400.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Resources/ic_library_books_black_24dp_2x.png" />
+               </image>
+            </ImageView>
+         </children>
+         <effect>
+            <DropShadow />
+         </effect>
+      </Pane>
+      <JFXButton fx:id="logoutBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutY="761.0" onMouseClicked="#logout" prefHeight="39.0" prefWidth="256.0" style="-fx-background-color: #2c3e50; -fx-background-radius: 0;" text="Logout" textFill="#ecf0f1" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+         <effect>
+            <Glow level="0.02" />
+         </effect>
+      </JFXButton>
+      <ImageView fitHeight="28.0" fitWidth="31.0" layoutX="7.0" layoutY="768.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="10.0">
+         <image>
+            <Image url="@../Resources/ic_power_settings_new_white_24dp_2x.png" />
+         </image>
+      </ImageView>
+      <AnchorPane fx:id="summaryPane" layoutX="256.0" prefHeight="800.0" prefWidth="1025.0" style="-fx-background-color: #2c3e50;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="255.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <JFXToolbar prefHeight="98.0" prefWidth="1025.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <center>
+                  <Label alignment="CENTER" prefHeight="59.0" prefWidth="579.0" text="Summary" textAlignment="CENTER" textFill="#3498db" BorderPane.alignment="CENTER">
                      <font>
-                        <Font name="Nirmala UI" size="24.0" />
+                        <Font name="System Bold" size="41.0" />
                      </font>
                   </Label>
-               </left>
-               <right>
-                  <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <JFXToolbar prefHeight="51.0" prefWidth="201.0">
-                           <center>
-                              <JFXButton fx:id="logoutBtn" contentDisplay="CENTER" onMouseClicked="#logout" prefHeight="24.0" prefWidth="87.0" style="-fx-background-color: #e2e2e2;" text="logout" textAlignment="CENTER" textFill="#247ba0" BorderPane.alignment="CENTER">
-                                 <font>
-                                    <Font name="Nirmala UI Bold" size="11.0" />
-                                 </font>
-                              </JFXButton>
-                           </center>
-                        </JFXToolbar>
-                     </children>
-                  </HBox>
-               </right>
-            </JFXToolbar>
-            <JFXToolbar prefHeight="56.0" prefWidth="1028.0">
-               <center>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <JFXButton fx:id="incomeBtn" prefHeight="34.0" prefWidth="159.0" style="-fx-background-color: #247ba0;" text="Income" textFill="#e2e2e2" />
-                        <JFXButton fx:id="expensesBtn" prefHeight="34.0" prefWidth="159.0" style="-fx-background-color: #247ba0;" text="Expenses" textFill="#e2e2e2" />
-                        <JFXButton fx:id="journalBtn" prefHeight="34.0" prefWidth="159.0" style="-fx-background-color: #247ba0;" text="Journal Entries" textFill="#e2e2e2" />
-                        <JFXButton fx:id="categoriesBtn" prefHeight="34.0" prefWidth="159.0" style="-fx-background-color: #247ba0;" text="Categories" textFill="#e2e2e2" />
-                     </children>
-                  </HBox>
                </center>
             </JFXToolbar>
+            <AnchorPane layoutX="14.0" layoutY="107.0" prefHeight="623.0" prefWidth="359.0" style="-fx-background-color: #bdc3c7;" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="107.0">
+               <children>
+                  <Pane layoutX="10.0" layoutY="364.0" prefHeight="88.0" prefWidth="339.0" style="-fx-background-color: #2c3e50;" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                     <children>
+                        <Label layoutX="14.0" layoutY="6.0" prefHeight="28.0" prefWidth="168.0" text="Monthly Savings" textFill="#ecf0f1">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="totalSavingsLbl" alignment="CENTER_RIGHT" layoutY="27.0" prefHeight="63.0" prefWidth="320.0" text="\$0.00" textFill="#ecf0f1">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane layoutX="10.0" layoutY="265.0" prefHeight="88.0" prefWidth="339.0" style="-fx-background-color: #2c3e50;" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                     <children>
+                        <Label layoutX="14.0" layoutY="6.0" prefHeight="28.0" prefWidth="168.0" text="Monthly Expenses" textFill="#ecf0f1">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="totalExpenseLbl" alignment="CENTER_RIGHT" layoutY="27.0" prefHeight="63.0" prefWidth="320.0" text="\$0.00" textFill="#ecf0f1">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane layoutX="10.0" layoutY="169.0" prefHeight="88.0" prefWidth="339.0" style="-fx-background-color: #2c3e50;" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                     <children>
+                        <Label layoutX="14.0" layoutY="6.0" prefHeight="28.0" prefWidth="168.0" text="Monthly Income" textFill="#ecf0f1">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="totalIncomeLbl" alignment="CENTER_RIGHT" layoutY="27.0" prefHeight="63.0" prefWidth="320.0" text="\$0.00" textFill="#ecf0f1">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane layoutX="10.0" layoutY="74.0" prefHeight="88.0" prefWidth="339.0" style="-fx-background-color: #2c3e50;" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="74.0">
+                     <children>
+                        <Label layoutX="14.0" layoutY="6.0" prefHeight="28.0" prefWidth="168.0" text="Beginning Balance" textFill="#ecf0f1">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="beginningBalLbl" alignment="CENTER_RIGHT" layoutY="27.0" prefHeight="63.0" prefWidth="320.0" text="\$0.00" textFill="#ecf0f1">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane layoutX="10.0" layoutY="462.0" prefHeight="88.0" prefWidth="339.0" style="-fx-background-color: #2c3e50;" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="462.0">
+                     <children>
+                        <Label layoutX="14.0" layoutY="6.0" prefHeight="28.0" prefWidth="168.0" text="Cash Balance" textFill="#ecf0f1">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="cashBalLbl" alignment="CENTER_RIGHT" layoutY="27.0" prefHeight="63.0" prefWidth="320.0" text="\$0.00" textFill="#ecf0f1">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <JFXButton fx:id="refreshBtn" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" layoutX="294.0" layoutY="562.0" prefHeight="39.0" prefWidth="39.0" text="Refresh" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="10.0">
+                     <graphic>
+                        <ImageView fitHeight="39.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Resources/ic_autorenew_black_24dp_2x.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="395.0" layoutY="107.0" prefHeight="623.0" prefWidth="625.0" style="-fx-background-color: #bdc3c7;" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="395.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="107.0">
+               <children>
+                  <PieChart layoutX="63.0" layoutY="74.0" prefHeight="474.0" prefWidth="505.0" AnchorPane.bottomAnchor="73.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="74.0" />
+               </children>
+            </AnchorPane>
+            <Pane layoutY="761.0" prefHeight="39.0" prefWidth="1025.0" style="-fx-background-color: #2980b9;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
          </children>
-      </VBox>
-   </top>
-   <center>
-      <VBox prefHeight="484.0" prefWidth="204.0" spacing="50.0" BorderPane.alignment="CENTER">
+      </AnchorPane>
+      <AnchorPane fx:id="financePane" layoutX="255.0" prefHeight="800.0" prefWidth="1025.0" style="-fx-background-color: #2c3e50;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="255.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Pane prefHeight="47.0" prefWidth="492.0" />
-            <JFXToolbar>
+            <JFXToolbar layoutY="6.0" prefHeight="89.0" prefWidth="1025.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
                <center>
-                  <HBox alignment="CENTER" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label prefHeight="63.0" prefWidth="259.0" text="Beginning Balance" textAlignment="CENTER">
-                           <font>
-                              <Font name="Nirmala UI Semilight" size="25.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="beginningBalLbl" alignment="CENTER_RIGHT" prefHeight="59.0" prefWidth="223.0" text="\$0.00">
-                           <font>
-                              <Font name="Nirmala UI Semilight" size="25.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
+                  <Label alignment="CENTER" prefHeight="70.0" prefWidth="434.0" text="Income" textFill="#3498db" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="36.0" />
+                     </font>
+                  </Label>
                </center>
             </JFXToolbar>
-            <JFXToolbar>
-               <center>
-                  <HBox alignment="CENTER" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label prefHeight="63.0" prefWidth="259.0" text="Total Monthly Income" textAlignment="CENTER">
-                           <font>
-                              <Font name="Nirmala UI Semilight" size="25.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="totalIncomeLbl" alignment="CENTER_RIGHT" prefHeight="59.0" prefWidth="223.0" text="\$0.00">
-                           <font>
-                              <Font name="Nirmala UI Semilight" size="25.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-               </center>
-            </JFXToolbar>
-            <JFXToolbar>
-               <center>
-                  <HBox alignment="CENTER" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label prefHeight="63.0" prefWidth="259.0" text="Total Monthly Expenses" textAlignment="CENTER">
-                           <font>
-                              <Font name="Nirmala UI Semilight" size="25.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="totalExpenseLbl" alignment="CENTER_RIGHT" prefHeight="59.0" prefWidth="223.0" text="\$0.00">
-                           <font>
-                              <Font name="Nirmala UI Semilight" size="25.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-               </center>
-            </JFXToolbar>
-            <JFXToolbar>
-               <center>
-                  <HBox alignment="CENTER" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label prefHeight="63.0" prefWidth="259.0" text="Total Monthly Savings" textAlignment="CENTER">
-                           <font>
-                              <Font name="Nirmala UI Semilight" size="25.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="totalSavingsLbl" alignment="CENTER_RIGHT" prefHeight="59.0" prefWidth="223.0" text="\$0.00">
-                           <font>
-                              <Font name="Nirmala UI Semilight" size="25.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-               </center>
-            </JFXToolbar>
-            <JFXToolbar>
-               <center>
-                  <HBox alignment="CENTER" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label prefHeight="63.0" prefWidth="259.0" text="Cash Balance" textAlignment="CENTER">
-                           <font>
-                              <Font name="Nirmala UI Semilight" size="25.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="cashBalLbl" alignment="CENTER_RIGHT" prefHeight="59.0" prefWidth="223.0" text="\$0.00">
-                           <font>
-                              <Font name="Nirmala UI Semilight" size="25.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-               </center>
-            </JFXToolbar>
+            <TableView fx:id="financeTable" focusTraversable="false" layoutY="161.0" prefHeight="604.0" prefWidth="1025.0" style="-fx-background-color: transparent;" stylesheets="@../Resources/stylesheet.css" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="161.0" />
+            <Pane layoutY="761.0" prefHeight="39.0" prefWidth="1025.0" style="-fx-background-color: #2980b9;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+            <JFXDatePicker defaultColor="#3498db" layoutX="28.0" layoutY="105.0" stylesheets="@../Resources/stylesheet.css" />
+            <JFXButton alignment="CENTER" graphicTextGap="10.0" layoutX="896.0" layoutY="94.0" prefHeight="47.0" prefWidth="115.0" text="Add" textFill="#3498db">
+               <graphic>
+                  <ImageView fitHeight="39.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Resources/ic_add_circle_black_24dp_2x.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </JFXButton>
          </children>
-      </VBox>
-   </center>
-   <bottom>
-      <JFXToolbar prefHeight="35.0" prefWidth="1028.0" style="-fx-background-color: #247ba0;" BorderPane.alignment="CENTER" />
-   </bottom>
-</BorderPane>
+      </AnchorPane>
+   </children>
+</AnchorPane>

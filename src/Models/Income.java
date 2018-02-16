@@ -1,5 +1,6 @@
 package Models;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 
 public class Income {
@@ -48,7 +49,10 @@ public class Income {
     }
 
     public double getAmount() {
-        return amount;
+        DecimalFormat df = new DecimalFormat("#.00");
+
+
+        return Double.parseDouble(df.format(this.amount));
     }
 
     public void setAmount(double amount) {
@@ -63,6 +67,8 @@ public class Income {
         this.date = date;
     }
 
+    public String getCategoryName() { return this.getCategory().getName(); }
+
     public Category getCategory() {
         return category;
     }
@@ -74,6 +80,8 @@ public class Income {
     public TransactionType getTransactionType() {
         return transactionType;
     }
+
+    public String getTransactionName() { return getTransactionType().getName(); }
 
     public void setTransactionType(TransactionType transactionType) {
         this.transactionType = transactionType;
@@ -88,4 +96,6 @@ public class Income {
     {
         this.user = user;
     }
+
+    public String getUsername() { return this.getUser().getUsername(); }
 }

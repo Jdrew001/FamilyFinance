@@ -3,12 +3,12 @@ package login;
 import DBContext.DatabaseConnection;
 import Repositories.UserRepository;
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXPasswordField;
-import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -23,10 +23,10 @@ public class LoginController implements Initializable {
     public JFXButton loginBtn;
 
     @FXML
-    public JFXTextField usernameTxt;
+    public TextField usernameTxt;
 
     @FXML
-    public JFXPasswordField passwordTxt;
+    public PasswordField passwordTxt;
 
     UserRepository userRepository = new UserRepository();
 
@@ -49,7 +49,7 @@ public class LoginController implements Initializable {
                  */
                 Scene scene = new Scene(fxmlLoader.load());
                 Stage stage = new Stage();
-                stage.setTitle("New Window");
+                stage.setTitle("Main");
                 stage.setScene(scene);
                 stage.show();
 
