@@ -2,23 +2,48 @@ package Income;
 
 import Models.Income;
 import Repositories.IncomeRepository;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextField;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.ResourceBundle;
 
-public class IncomeController {
+public class IncomeController implements Initializable {
 
     public ObservableList<Income> incomes =  FXCollections.observableArrayList();
     IncomeRepository incomeRepository = new IncomeRepository();
     double totalIncomeAmount = 0.0;
+
+    //Input fields for new income prompt
+    @FXML
+    JFXTextField amountTxt;
+    @FXML
+    ChoiceBox incomeDropDown;
+    @FXML
+    JFXDatePicker incomeDatePicker;
+    @FXML
+    JFXButton submitBtn, cancelBtn;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
 
     public double getIncomeAmount()
     {
@@ -87,5 +112,28 @@ public class IncomeController {
 
         table.setItems(incomes);
         table.getColumns().addAll(amountCol, date, username, category, transaction);
+    }
+
+    //load choice box
+    public void loadChoiceBox()
+    {
+        //load in all the categories
+    }
+
+    @FXML
+    public void submitBtnAction(ActionEvent e)
+    {
+        if(e.getSource().equals(submitBtn))
+        {
+            //perform action of adding income
+        }
+    }
+
+
+    @FXML
+    public void cancelBtnAction()
+    {
+        Stage stage = (Stage)cancelBtn.getScene().getWindow();
+        stage.close();
     }
 }

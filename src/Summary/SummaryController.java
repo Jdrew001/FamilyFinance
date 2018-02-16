@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
@@ -27,7 +28,7 @@ public class SummaryController implements Initializable {
     IncomeController incomeController = new IncomeController();
 
     @FXML
-    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn;
+    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn, addIncome;
 
     @FXML
     JFXDatePicker incomeDatePicker, expenseDatePicker;
@@ -94,5 +95,15 @@ public class SummaryController implements Initializable {
             totalIncomeLbl.setTextFill(Color.RED);
 
         totalIncomeLbl.setText("$" + decimalFormat.format(totalIncomeAmount));
+    }
+
+    @FXML
+    private void addNewIncome(ActionEvent e)
+    {
+        if(e.getSource().equals(addIncome))
+        {
+            SceneChanger sceneChanger = new SceneChanger();
+            sceneChanger.showPrompt("../Income/AddIncome.fxml", "Add Income");
+        }
     }
 }
