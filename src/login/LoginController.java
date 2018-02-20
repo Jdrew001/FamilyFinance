@@ -41,6 +41,7 @@ public class LoginController implements Initializable {
         if(userRepository.login(usernameTxt.getText(), passwordTxt.getText()))
         {
             try {
+
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("../Summary/Summary.fxml"));
                 /*

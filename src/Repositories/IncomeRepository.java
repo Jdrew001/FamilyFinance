@@ -116,6 +116,33 @@ public class IncomeRepository extends BaseRepository {
         return null;
     }
 
+    public boolean addincome(double amount,int categoryId, Date date, int userId, int transId)
+    {
+        try {
+            conn = DatabaseConnection.dbConnection();
+            statement = conn.prepareCall("{ call add_income(?,?,?,?,?) }");
+            statement.setDouble(1, amount);
+            statement.setInt(2, categoryId);
+            statement.setDate(3, new java.sql.Date(date.getTime()));
+            statement.setInt(4, userId);
+            statement.setInt(5, transId);
+
+            statement.execute();
+
+            try {
+                close(conn, statement, result);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+
+            return false;
+        }
+
+        return true;
+    }
+
     public boolean updateIncome(double amount, int categoryId, Date date, int userId, int transId, int incomeId)
     {
         try {

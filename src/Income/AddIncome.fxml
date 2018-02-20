@@ -3,7 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -15,14 +15,14 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </JFXTextField>
-      <ChoiceBox fx:id="incomeDropDown" layoutX="275.0" layoutY="236.0" prefHeight="54.0" prefWidth="325.0" style="-fx-background-color: transparent;" styleClass="input-field" stylesheets="@../Resources/stylesheet.css" AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="275.0" AnchorPane.topAnchor="236.0" />
       <Label alignment="CENTER" layoutX="322.0" layoutY="14.0" prefHeight="99.0" prefWidth="231.0" text="Add Income" textFill="#3498db" AnchorPane.leftAnchor="322.0" AnchorPane.rightAnchor="321.0" AnchorPane.topAnchor="14.0">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <JFXDatePicker fx:id="incomeDatePicker" defaultColor="#2980b9" layoutX="275.0" layoutY="338.0" prefHeight="54.0" prefWidth="324.0" stylesheets="@../Resources/stylesheet.css" AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="275.0" AnchorPane.topAnchor="338.0" />
-      <JFXButton fx:id="submitBtn" layoutX="245.0" layoutY="414.0" prefHeight="54.0" prefWidth="317.0" text="Submit" textFill="#3498db" AnchorPane.leftAnchor="245.0" AnchorPane.rightAnchor="245.0" AnchorPane.topAnchor="414.0" />
+      <JFXDatePicker fx:id="incomeDatePicker" defaultColor="#2980b9" layoutX="275.0" layoutY="338.0" prefHeight="54.0" prefWidth="324.0" style="-fx-text-fill: white;" stylesheets="@../Resources/stylesheet.css" AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="275.0" AnchorPane.topAnchor="338.0" />
+      <JFXButton fx:id="submitBtn" layoutX="245.0" layoutY="414.0" onAction="#submitBtnAction" prefHeight="54.0" prefWidth="317.0" text="Submit" textFill="#3498db" AnchorPane.leftAnchor="245.0" AnchorPane.rightAnchor="245.0" AnchorPane.topAnchor="414.0" />
       <JFXButton fx:id="cancelBtn" layoutX="248.0" layoutY="477.0" onMouseClicked="#cancelBtnAction" prefHeight="54.0" prefWidth="348.0" text="Cancel" textFill="#3498db" AnchorPane.leftAnchor="245.0" AnchorPane.rightAnchor="245.0" />
+      <ComboBox fx:id="categoryDropdown" layoutX="275.0" layoutY="246.0" prefHeight="54.0" prefWidth="324.0" style="-fx-text-fill: white;" stylesheets="@../Resources/stylesheet.css" />
    </children>
 </AnchorPane>

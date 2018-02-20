@@ -28,4 +28,8 @@ public class Constants {
     public static final String nTransaction = "name";
     public static final String transactionName = "transactionname";
     public static final String idTransactionType = "idtransactiontype";
+
+    //Transactions
+    public static final int debit = 1;
+    public static final int credit = 2;
 }

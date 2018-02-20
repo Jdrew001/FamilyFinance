@@ -1,5 +1,6 @@
 package Repositories;
 
+import Business.UserProperties;
 import Models.User;
 
 import javax.xml.transform.Result;
@@ -13,8 +14,12 @@ public class UserRepository extends BaseRepository {
         //I want to return true if the user's creditials matched a record in the databa
         ResultSet s = performUserCheck("{ call get_user_login(?, ?)}", username, password);
         try {
-            if(s.first())
+            if(s.first()) {
+                //set the logged in user here
+                UserProperties.userId = s.getInt("idUser");
+                UserProperties.username = s.getString("username");
                 return true;
+            }
             else
                 return false;
 

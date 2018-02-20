@@ -1,6 +1,11 @@
 package Income;
 
+import Business.Constants;
+import Business.UserProperties;
+import Category.CategoryController;
+import Models.Category;
 import Models.Income;
+import Repositories.CategoryRepository;
 import Repositories.IncomeRepository;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
@@ -11,30 +16,31 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class IncomeController implements Initializable {
 
     public ObservableList<Income> incomes =  FXCollections.observableArrayList();
     IncomeRepository incomeRepository = new IncomeRepository();
+    CategoryRepository categoryRepository = new CategoryRepository();
     double totalIncomeAmount = 0.0;
 
     //Input fields for new income prompt
     @FXML
     JFXTextField amountTxt;
     @FXML
-    ChoiceBox incomeDropDown;
+    ComboBox categoryDropdown;
     @FXML
     JFXDatePicker incomeDatePicker;
     @FXML
@@ -42,12 +48,13 @@ public class IncomeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        loadChoiceBox(); //not going to work
     }
 
     public double getIncomeAmount()
     {
         incomes = incomeRepository.getIncomeByMonth(new Date());
+        System.out.println(new Date());
 
         for(Income income : incomes)
         {
@@ -118,6 +125,36 @@ public class IncomeController implements Initializable {
     public void loadChoiceBox()
     {
         //load in all the categories
+        categoryDropdown.setItems(categoryRepository.getAllCategories());
+        categoryDropdown.setButtonCell(new ListCell<Category>() {
+            protected void updateItem(Category item, boolean empty) {
+                super.updateItem(item, empty);
+                if(item != null) {
+                    setText(item.getId() +" " + item.getName());
+                } else {
+                    setText(null);
+                }
+            }
+        });
+        categoryDropdown.setCellFactory(new Callback<ListView<Category>, ListCell<Category>>() {
+            @Override
+            public ListCell call(ListView<Category> p) {
+
+                final ListCell<Category> cell = new ListCell<Category>() {
+                    @Override
+                    protected void updateItem(Category item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if(item != null) {
+                            setText(item.getName());
+                        } else {
+                            setText(null);
+                        }
+                    }
+                };
+
+                return cell;
+            }
+        });
     }
 
     @FXML
@@ -126,6 +163,15 @@ public class IncomeController implements Initializable {
         if(e.getSource().equals(submitBtn))
         {
             //perform action of adding income
+            Category cat = (Category) categoryDropdown.getSelectionModel().getSelectedItem();
+
+            if(incomeRepository.addincome(Double.parseDouble(amountTxt.getText()), cat.getId(),
+                    Date.from(incomeDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), UserProperties.userId, Constants.credit))
+            {
+                submitBtn.getScene().getWindow().hide();
+            } else {
+                System.out.println("Show error here!!!"); //TODO CREATE VALIDATION HERE
+            }
         }
     }
 

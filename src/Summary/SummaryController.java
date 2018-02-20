@@ -1,6 +1,7 @@
 package Summary;
 
 import Business.SceneChanger;
+import Category.CategoryController;
 import Models.Income;
 import Models.User;
 import Income.IncomeController;
@@ -12,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -26,9 +28,10 @@ public class SummaryController implements Initializable {
 
     //load in all controllers
     IncomeController incomeController = new IncomeController();
+    CategoryController categoryController = new CategoryController();
 
     @FXML
-    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn, addIncome;
+    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn, addIncome, addCategory;
 
     @FXML
     JFXDatePicker incomeDatePicker, expenseDatePicker;
@@ -37,11 +40,14 @@ public class SummaryController implements Initializable {
     TableView financeTable;
 
     @FXML
+    ListView categoryListView;
+
+    @FXML
     Label beginningBalLbl, totalIncomeLbl, totalExpenseLbl, totalSavingsLbl, cashBalLbl;
 
     //panes
     @FXML
-    AnchorPane summaryPane, financePane;
+    AnchorPane summaryPane, financePane, categoryPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -66,6 +72,9 @@ public class SummaryController implements Initializable {
         } else if (e.getSource() == incomeBtn) {
             financePane.toFront();
 
+        } else if(e.getSource() == categoriesBtn) {
+            categoryPane.toFront();
+            categoryController.loadItems(categoryListView);
         }
     }
 
@@ -104,6 +113,15 @@ public class SummaryController implements Initializable {
         {
             SceneChanger sceneChanger = new SceneChanger();
             sceneChanger.showPrompt("../Income/AddIncome.fxml", "Add Income");
+        }
+    }
+
+    @FXML
+    public void addNewCategory(ActionEvent e) {
+        if(e.getSource().equals(addCategory))
+        {
+            SceneChanger sceneChanger = new SceneChanger();
+            sceneChanger.showPrompt("../Category/AddCategory.fxml", "Add Category");
         }
     }
 }
