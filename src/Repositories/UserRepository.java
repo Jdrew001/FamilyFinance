@@ -1,5 +1,6 @@
 package Repositories;
 
+import Business.AlertHelper;
 import Business.UserProperties;
 import Models.User;
 
@@ -21,7 +22,10 @@ public class UserRepository extends BaseRepository {
                 return true;
             }
             else
+            {
                 return false;
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,6 +34,7 @@ public class UserRepository extends BaseRepository {
                 close(conn, statement, s);
             } catch(Exception e) {
                 e.printStackTrace();
+                AlertHelper.showExceptionDialog("Exception", null, "Error in User", e);
             }
         }
 
@@ -52,6 +57,7 @@ public class UserRepository extends BaseRepository {
 
             } catch(Exception e) {
                 e.printStackTrace();
+                AlertHelper.showExceptionDialog("Exception", null, "Error in User", e);
             }
         }
 

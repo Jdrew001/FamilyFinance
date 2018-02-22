@@ -4,49 +4,54 @@ import Business.AlertHelper;
 import Business.Constants;
 import DBContext.DatabaseConnection;
 import Models.Category;
-import Models.Income;
+import Models.Expense;
 import Models.TransactionType;
 import Models.User;
+import com.sun.corba.se.impl.orb.DataCollectorBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.Date;
 import java.sql.SQLException;
+import java.util.Date;
 
-public class IncomeRepository extends BaseRepository {
+public class ExpenseRepository extends BaseRepository
+{
+    ObservableList<Expense> expenses = FXCollections.observableArrayList();
 
-    ObservableList<Income> incomes = FXCollections.observableArrayList();
-    public ObservableList<Income> getAllIncome()
-    {
+    //get all expenses
+    public ObservableList<Expense> getAllExpenses() {
         try {
             conn = DatabaseConnection.dbConnection();
-            statement = conn.prepareCall("{ call get_all_income()}");
-            statement.execute();
+            statement = conn.prepareCall("{ call get_all_expense() }");
             result = statement.getResultSet();
 
-            setIncome();
+            setExpense();
 
             try {
                 close(conn, statement, result);
-            } catch (Exception e) {
+            } catch(Exception e) {
                 e.printStackTrace();
+                AlertHelper.showExceptionDialog("Exception", null, "Error in Expense", e);
             }
 
-            return incomes;
-        } catch(SQLException ex) {
-            ex.printStackTrace();
+            return expenses;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return null;
     }
 
-    public Income getIncomeById(int id)
+
+    //get expense by id
+    public Expense getExpenseById(int id)
     {
-        Income income = null;
+        Expense expense = null;
         try {
             conn = DatabaseConnection.dbConnection();
-            statement = conn.prepareCall("{ call get_income_by_id(?)}");
-            statement.setInt(1, id);
+            statement = conn.prepareCall("{ get_expense_by_id(?) }");
+            statement .setInt(1, id);
             statement.execute();
             result = statement.getResultSet();
 
@@ -56,44 +61,18 @@ public class IncomeRepository extends BaseRepository {
                 Category c = new Category(result.getInt(Constants.idCategory), result.getString(Constants.categoryName));
                 TransactionType t = new TransactionType(result.getInt(Constants.idTransactionType), result.getString(Constants.transactionName));
 
-                income = new Income(result.getInt(Constants.idIncome), result.getDouble(Constants.amount),
-                        result.getDate(Constants.date), user, c, t);
+                expense = new Expense(result.getInt(Constants.idIncome), result.getDouble(Constants.amount),
+                        result.getDate(Constants.date), c, t, user);
             }
 
             try {
                 close(conn, statement, result);
             } catch(Exception e) {
                 e.printStackTrace();
+                AlertHelper.showExceptionDialog("Exception", null, "Error in Expense", e);
             }
 
-            return income;
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        return null;
-    }
-
-    //income by month
-    public ObservableList<Income> getIncomeByMonth(Date date)
-    {
-        try {
-            conn = DatabaseConnection.dbConnection();
-            statement = conn.prepareCall("{ call get_income_by_month(?)}");
-            statement.setDate(1, new java.sql.Date(date.getTime()));
-            statement.execute();
-            result = statement.getResultSet();
-
-            setIncome();
-
-            try {
-                close(conn, statement, result);
-            } catch(Exception e) {
-                e.printStackTrace();
-                AlertHelper.showExceptionDialog("Exception", null, "Error in income", e);
-            }
-
-            return incomes;
+            return expense;
 
         } catch(SQLException e) {
             e.printStackTrace();
@@ -102,11 +81,38 @@ public class IncomeRepository extends BaseRepository {
         return null;
     }
 
-    public boolean addincome(double amount,int categoryId, Date date, int userId, int transId)
+    //get expenses by month
+    public ObservableList<Expense> getExpensesByMonth(Date date) {
+        try {
+            conn = DatabaseConnection.dbConnection();
+            statement = conn.prepareCall("{ call get_expense_by_month(?) }");
+            statement.setDate(1, new java.sql.Date(date.getTime()));
+            statement.execute();
+
+            setExpense();
+
+            try {
+                close(conn, statement, result);
+            } catch(Exception e) {
+                e.printStackTrace();
+                AlertHelper.showExceptionDialog("Exception", null, "Error in Expense", e);
+            }
+
+            return expenses;
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
+
+    public boolean addExpense(double amount, int categoryId, Date date, int userId, int transId)
     {
         try {
             conn = DatabaseConnection.dbConnection();
-            statement = conn.prepareCall("{ call add_income(?,?,?,?,?) }");
+            statement = conn.prepareCall(" { add_expense(?,?,?,?,?) } ");
             statement.setDouble(1, amount);
             statement.setInt(2, categoryId);
             statement.setDate(3, new java.sql.Date(date.getTime()));
@@ -114,13 +120,13 @@ public class IncomeRepository extends BaseRepository {
             statement.setInt(5, transId);
 
             statement.execute();
-
             try {
                 close(conn, statement, result);
             } catch(Exception e) {
                 e.printStackTrace();
-                AlertHelper.showExceptionDialog("Exception", null, "Error in income", e);
+                AlertHelper.showExceptionDialog("Exception", null, "Error in Expense", e);
             }
+
         } catch(SQLException e) {
             e.printStackTrace();
 
@@ -130,11 +136,12 @@ public class IncomeRepository extends BaseRepository {
         return true;
     }
 
-    public boolean updateIncome(double amount, int categoryId, Date date, int userId, int transId, int incomeId)
+    //UPDATE EXPENSE
+    public boolean updateExpense(double amount, int categoryId, Date date, int userId, int transId, int incomeId)
     {
         try {
             conn = DatabaseConnection.dbConnection();
-            statement = conn.prepareCall("{ call update_income(?,?,?,?,?,?) }");
+            statement = conn.prepareCall("{ update_expense(?,?,?,?,?,?) }");
             statement.setDouble(1, amount);
             statement.setInt(2, categoryId);
             statement.setDate(3, new java.sql.Date(date.getTime()));
@@ -150,7 +157,7 @@ public class IncomeRepository extends BaseRepository {
                 e.printStackTrace();
                 AlertHelper.showExceptionDialog("Exception", null, "Error in income", e);
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
             return false;
@@ -159,11 +166,12 @@ public class IncomeRepository extends BaseRepository {
         return true;
     }
 
-    public boolean deleteIncome(int id)
+    //delete
+    public boolean deleteExpense(int id)
     {
         try {
             conn = DatabaseConnection.dbConnection();
-            statement = conn.prepareCall("{ call delete_income(?) }");
+            statement = conn.prepareCall(" { call delete_expense(?) } ");
             statement.setInt(1, id);
             statement.execute();
 
@@ -171,9 +179,9 @@ public class IncomeRepository extends BaseRepository {
                 close(conn, statement, result);
             } catch(Exception e) {
                 e.printStackTrace();
-                AlertHelper.showExceptionDialog("Exception", null, "Error in income", e);
+                AlertHelper.showExceptionDialog("Exception", null, "Error in Expense", e);
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
             return false;
@@ -182,15 +190,14 @@ public class IncomeRepository extends BaseRepository {
         return true;
     }
 
-    private void setIncome() throws SQLException {
+    private void setExpense() throws SQLException {
         while(result.next())
         {
             User user = new User(result.getInt(Constants.idUser), result.getString(Constants.firstname), result.getString(Constants.lastname), result.getString(Constants.username));
             Category c = new Category(result.getInt(Constants.idCategory), result.getString(Constants.categoryName));
             TransactionType t = new TransactionType(result.getInt(Constants.idTransactionType), result.getString(Constants.transactionName));
 
-            incomes.add(new Income(result.getInt(Constants.idIncome), result.getDouble(Constants.amount),
-                    result.getDate(Constants.date), user, c, t));
+            expenses.add(new Expense(result.getInt(Constants.idExpense), result.getDouble(Constants.amount), result.getDate(Constants.date), c, t, user));
         }
     }
 }

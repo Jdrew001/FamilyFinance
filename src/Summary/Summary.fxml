@@ -264,7 +264,19 @@
                </center>
             </JFXToolbar>
             <TableView fx:id="financeTable" focusTraversable="false" layoutY="161.0" onMouseClicked="#clickIncomeTableItem" prefHeight="604.0" prefWidth="1025.0" style="-fx-selection-bar: red; fx-selection-bar-non-focused: pink;" stylesheets="@../Resources/stylesheet.css" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="161.0" />
-            <Pane layoutY="761.0" prefHeight="39.0" prefWidth="1025.0" style="-fx-background-color: #2980b9;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+            <Pane layoutY="761.0" prefHeight="39.0" prefWidth="1025.0" style="-fx-background-color: #2980b9;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <Label layoutX="14.0" prefHeight="39.0" prefWidth="73.0" text="Income" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="95.0" prefHeight="39.0" prefWidth="95.0" text="\$0.00" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children></Pane>
             <JFXDatePicker fx:id="incomeDatePicker" defaultColor="#3498db" layoutX="28.0" layoutY="105.0" onAction="#handleDatePicker" prefHeight="28.0" prefWidth="175.0" stylesheets="@../Resources/stylesheet.css" AnchorPane.leftAnchor="28.0" AnchorPane.topAnchor="105.0" />
             <JFXButton fx:id="addIncome" alignment="CENTER" graphicTextGap="10.0" layoutX="896.0" layoutY="94.0" onAction="#addNewIncome" prefHeight="47.0" prefWidth="115.0" text="Add" textFill="#3498db" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="94.0">
                <graphic>

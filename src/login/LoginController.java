@@ -1,5 +1,6 @@
 package login;
 
+import Business.AlertHelper;
 import DBContext.DatabaseConnection;
 import Repositories.UserRepository;
 import com.jfoenix.controls.JFXButton;
@@ -62,6 +63,7 @@ public class LoginController implements Initializable {
             }
         } else {
             //TODO show alert dialog showing it didn't work
+            AlertHelper.showErrorDialog("Login Failed", null, "Please try to login again. An Error occurred");
         }
 
     }

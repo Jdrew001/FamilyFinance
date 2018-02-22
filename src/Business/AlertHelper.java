@@ -22,6 +22,8 @@ public class AlertHelper {
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
+
+        alert.showAndWait();
     }
 
     //Warning Dialog
@@ -31,6 +33,8 @@ public class AlertHelper {
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
+
+        alert.showAndWait();
     }
 
     //Error Dialog
@@ -40,6 +44,8 @@ public class AlertHelper {
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
+
+        alert.showAndWait();
     }
 
     //Exception Dialog

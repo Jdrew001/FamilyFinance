@@ -1,5 +1,6 @@
 package Repositories;
 
+import Business.AlertHelper;
 import Business.Constants;
 import DBContext.DatabaseConnection;
 import Models.Category;
@@ -34,6 +35,7 @@ public class CategoryRepository extends BaseRepository {
                 close(conn, statement, result);
             } catch(Exception e) {
                 e.printStackTrace();
+                AlertHelper.showExceptionDialog("Exception", null, "Error in categories", e);
             }
 
             return categories;
@@ -66,6 +68,7 @@ public class CategoryRepository extends BaseRepository {
                 close(conn, statement, result);
             } catch(Exception e) {
                 e.printStackTrace();
+                AlertHelper.showExceptionDialog("Exception", null, "Error in categories", e);
             }
 
             return category;
@@ -89,6 +92,7 @@ public class CategoryRepository extends BaseRepository {
                 close(conn, statement, result);
             } catch (Exception e) {
                 e.printStackTrace();
+                AlertHelper.showExceptionDialog("Exception", null, "Error in categories", e);
             }
         } catch(SQLException e) {
             e.printStackTrace();
@@ -114,9 +118,11 @@ public class CategoryRepository extends BaseRepository {
                 close(conn, statement, result);
             } catch (Exception e) {
                 e.printStackTrace();
+                AlertHelper.showExceptionDialog("Exception", null, "Error in categories", e);
             }
         } catch(SQLException e) {
             e.printStackTrace();
+
 
             return false;
         }
@@ -135,6 +141,7 @@ public class CategoryRepository extends BaseRepository {
 
         } catch(SQLException e) {
             e.printStackTrace();
+            AlertHelper.showExceptionDialog("Exception", null, "Error in categories", e);
         }
 
         try {
