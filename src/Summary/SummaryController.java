@@ -1,5 +1,6 @@
 package Summary;
 
+import Business.AlertHelper;
 import Business.SceneChanger;
 import Category.CategoryController;
 import Models.Income;
@@ -12,9 +13,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
@@ -31,7 +34,7 @@ public class SummaryController implements Initializable {
     CategoryController categoryController = new CategoryController();
 
     @FXML
-    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn, addIncome, addCategory;
+    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn, addIncome, removeIncome, addCategory;
 
     @FXML
     JFXDatePicker incomeDatePicker, expenseDatePicker;
@@ -62,17 +65,15 @@ public class SummaryController implements Initializable {
 
     //Changing the view panes -- NAVIGATION
     @FXML
-    public void handleButtonAction(ActionEvent e)
-    {
+    public void handleButtonAction(ActionEvent e) {
         System.out.println(e.getSource());
-        if(e.getSource() == summaryBtn)
-        {
+        if (e.getSource() == summaryBtn) {
             summaryPane.toFront();
 
         } else if (e.getSource() == incomeBtn) {
             financePane.toFront();
 
-        } else if(e.getSource() == categoriesBtn) {
+        } else if (e.getSource() == categoriesBtn) {
             categoryPane.toFront();
             categoryController.loadItems(categoryListView);
         }
@@ -80,25 +81,22 @@ public class SummaryController implements Initializable {
 
     //wire up the datepicker
     @FXML
-    public void handleDatePicker(ActionEvent e)
-    {
-        if(e.getSource().equals(incomeDatePicker))
-        {
+    public void handleDatePicker(ActionEvent e) {
+        if (e.getSource().equals(incomeDatePicker)) {
             financeTable.getColumns().clear();
             Date date = Date.from(incomeDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             incomeController.initializeTable(financeTable, incomeController.loadIncome(date));
 
-        } else if(e.getSource().equals(expenseDatePicker)) {
+        } else if (e.getSource().equals(expenseDatePicker)) {
 
         }
     }
 
-    private void incomeAmount()
-    {
+    private void incomeAmount() {
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
         double totalIncomeAmount = incomeController.getIncomeAmount();
 
-        if(totalIncomeAmount > 0)
+        if (totalIncomeAmount > 0)
             totalIncomeLbl.setTextFill(Color.GREEN);
         else
             totalIncomeLbl.setTextFill(Color.RED);
@@ -107,12 +105,28 @@ public class SummaryController implements Initializable {
     }
 
     @FXML
-    private void addNewIncome(ActionEvent e)
-    {
-        if(e.getSource().equals(addIncome))
-        {
+    public void clickIncomeTableItem(MouseEvent event) {
+        if (event.getClickCount() == 1) {
+            Income.class.cast(financeTable.getSelectionModel().getSelectedItem());
+        } else if (event.getClickCount() == 2) {
+            handleDeletionIncome();
+        }
+    }
+
+    @FXML
+    private void addNewIncome(ActionEvent e) {
+        if (e.getSource().equals(addIncome)) {
             SceneChanger sceneChanger = new SceneChanger();
             sceneChanger.showPrompt("../Income/AddIncome.fxml", "Add Income");
+        }
+    }
+
+    @FXML
+    private void removeIncomeEntry(ActionEvent e)
+    {
+        if(e.getSource().equals(removeIncome)) {
+            if(financeTable.getSelectionModel().getSelectedItem() != null)
+                handleDeletionIncome();
         }
     }
 
@@ -122,6 +136,18 @@ public class SummaryController implements Initializable {
         {
             SceneChanger sceneChanger = new SceneChanger();
             sceneChanger.showPrompt("../Category/AddCategory.fxml", "Add Category");
+        }
+    }
+
+    private void handleDeletionIncome()
+    {
+        if(AlertHelper.showConfirmationDialog("Delete Confirmation",null, "Are you sure you want to delete this entry?"))
+        {
+            // Remove income and update table
+            incomeController.removeIncome(Income.class.cast(financeTable.getSelectionModel().getSelectedItem()).getIdIncome());
+            financeTable.getColumns().clear();
+            Date date = Date.from(incomeDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            incomeController.initializeTable(financeTable, incomeController.loadIncome(date));
         }
     }
 }

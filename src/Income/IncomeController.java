@@ -98,7 +98,7 @@ public class IncomeController implements Initializable {
                     setText(null);
                 } else {
                     DecimalFormat decimalFormat = new DecimalFormat("#.00");
-                    setText(decimalFormat.format(value.doubleValue()));
+                    setText("$ "+decimalFormat.format(value.doubleValue()));
                 }
             }
         });
@@ -155,6 +155,12 @@ public class IncomeController implements Initializable {
                 return cell;
             }
         });
+    }
+
+    //handle table click events
+    public void removeIncome(int id)
+    {
+        incomeRepository.deleteIncome(id);
     }
 
     @FXML
