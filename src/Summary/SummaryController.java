@@ -10,6 +10,7 @@ import Income.IncomeController;
 import Repositories.IncomeRepository;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
+import javafx.beans.property.ObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,7 +38,7 @@ public class SummaryController implements Initializable {
     CategoryController categoryController = new CategoryController();
 
     @FXML
-    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn, addIncome, removeIncome, addExpense, removeExpense, addCategory;
+    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn, addIncome, removeIncome, addExpense, removeExpense, addCategory, removeCategory;
 
     @FXML
     JFXDatePicker incomeDatePicker, expenseDatePicker;
@@ -199,6 +200,15 @@ public class SummaryController implements Initializable {
         {
             SceneChanger sceneChanger = new SceneChanger();
             sceneChanger.showPrompt("../Category/AddCategory.fxml", "Add Category");
+        }
+    }
+
+    @FXML
+    public void removeCategory(ActionEvent e) {
+        if(e.getSource().equals(removeCategory))
+        {
+            categoryController.removeItem(categoryListView.getSelectionModel().getSelectedItems());
+            categoryController.loadItems(categoryListView);
         }
     }
 

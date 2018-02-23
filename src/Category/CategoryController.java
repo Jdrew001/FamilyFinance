@@ -2,9 +2,11 @@ package Category;
 
 import Business.AlertHelper;
 import Models.Category;
+import Models.Income;
 import Repositories.CategoryRepository;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -35,6 +37,7 @@ public class CategoryController {
             }
         });
         //load in the data from service
+        categoryListView.getItems().clear();
         categoryListView.setItems(categoryRepository.getAllCategories());
     }
 
@@ -59,5 +62,12 @@ public class CategoryController {
     public void cancelWindow()
     {
         cancelBtn.getScene().getWindow().hide();
+    }
+
+    public void removeItem(ObservableList selectedItems) {
+        ObservableList<Category> categories = selectedItems;
+        for (Category category:categories) {
+            categoryRepository.deleteCategory(category.getId());
+        }
     }
 }
