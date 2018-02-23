@@ -1,86 +1,71 @@
-package Income;
+package Expense;
 
 import Business.AlertHelper;
 import Business.Constants;
 import Business.UserProperties;
-import Category.CategoryController;
 import Models.Category;
-import Models.Income;
+import Models.Expense;
+import javafx.event.ActionEvent;
 import Repositories.CategoryRepository;
-import Repositories.IncomeRepository;
+import Repositories.ExpenseRepository;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
 import java.util.ResourceBundle;
 
-public class IncomeController implements Initializable {
+public class ExpenseController implements Initializable {
 
-    public ObservableList<Income> incomes =  FXCollections.observableArrayList();
-    IncomeRepository incomeRepository = new IncomeRepository();
+    ExpenseRepository expenseRepository = new ExpenseRepository();
+    public ObservableList<Expense> expenses = FXCollections.observableArrayList();
     CategoryRepository categoryRepository = new CategoryRepository();
-    double totalIncomeAmount = 0.0;
+    double totalExpenseAmount = 0.0;
 
-    //Input fields for new income prompt
     @FXML
-    JFXTextField amountTxt;
+    public JFXTextField amountTxt;
+
     @FXML
-    ComboBox categoryDropdown;
+    public ComboBox categoryDropdown;
+
     @FXML
-    JFXDatePicker incomeDatePicker;
+    public JFXDatePicker expenseDatePicker;
+
     @FXML
-    JFXButton submitBtn, cancelBtn;
+    public JFXButton submitBtn, cancelBtn;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadChoiceBox();
     }
 
-    public double getIncomeAmount()
+    public double getExpenseAmount()
     {
-        totalIncomeAmount = 0;
-        incomes.clear();
-        incomes = incomeRepository.getIncomeByMonth(new Date());
+        totalExpenseAmount = 0;
+        expenses.clear();
+        expenses = expenseRepository.getExpensesByMonth(new Date());
 
-        for(Income income : incomes)
+        for(Expense expense : expenses)
         {
-            totalIncomeAmount += income.getAmount();
+            totalExpenseAmount += expense.getAmount();
         }
 
-        return totalIncomeAmount;
+        return totalExpenseAmount;
     }
 
-    public ObservableList<Income> loadIncome()
-    {
-        incomes = incomeRepository.getIncomeByMonth(new Date());
-
-        return incomes;
-    }
-
-    public ObservableList<Income> loadIncome(Date date) {
-        incomes.clear();
-        incomes = incomeRepository.getIncomeByMonth(date);
-        return incomes;
-    }
-
-    public void initializeTable(TableView table, ObservableList<Income> incomes)
-    {
+    public void initializeTable(TableView table, ObservableList<Expense> expenses) {
         table.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
             @Override
             public Boolean call(TableView.ResizeFeatures param) {
@@ -88,51 +73,54 @@ public class IncomeController implements Initializable {
             }
         });
         table.setEditable(false);
-        TableColumn<Income, Number> amountCol = new TableColumn<>("Amount");
+        TableColumn<Expense, Number> amountCol = new TableColumn<Expense, Number>("Amount");
         amountCol.setMinWidth(200);
         amountCol.setCellValueFactory(cellData -> new ReadOnlyDoubleWrapper(cellData.getValue().getAmount()));
 
-        amountCol.setCellFactory(tc -> new TableCell<Income, Number>() {
+        amountCol.setCellFactory(tc -> new TableCell<Expense, Number>() {
             @Override
             protected void updateItem(Number value, boolean empty) {
                 super.updateItem(value, empty);
-                if(empty) {
+                if (empty) {
                     setText(null);
                 } else {
                     DecimalFormat decimalFormat = new DecimalFormat("#.00");
-                    setText("$ "+decimalFormat.format(value.doubleValue()));
+                    setText("$ " + decimalFormat.format(value.doubleValue()));
                 }
             }
         });
 
+        for(int i = 0; i < 2; i++)
+        {
+            System.out.println(expenses.get(i).getUser().getUsername());
+        }
+
         TableColumn date = new TableColumn("Date");
         date.setMinWidth(200);
-        date.setCellValueFactory(new PropertyValueFactory<Income, Date>("date"));
+        date.setCellValueFactory(new PropertyValueFactory<Expense, Date>("date"));
         TableColumn username = new TableColumn("Added By");
-        username.setCellValueFactory(new PropertyValueFactory<Income, String>("username"));
+        username.setCellValueFactory(new PropertyValueFactory<Expense, String>("username"));
         username.setMinWidth(200);
         TableColumn category = new TableColumn("Category");
-        category.setCellValueFactory(new PropertyValueFactory<Income, String>("categoryName"));
+        category.setCellValueFactory(new PropertyValueFactory<Expense, String>("categoryName"));
         category.setMinWidth(200);
         TableColumn transaction = new TableColumn("Transaction");
-        transaction.setCellValueFactory(new PropertyValueFactory<Income, String>("transactionName"));
+        transaction.setCellValueFactory(new PropertyValueFactory<Expense, String>("transactionName"));
         transaction.setMinWidth(200);
 
-
-        table.setItems(incomes);
+        table.setItems(expenses);
         table.getColumns().addAll(amountCol, date, username, category, transaction);
+
     }
 
-    //load choice box
-    public void loadChoiceBox()
-    {
+    public void loadChoiceBox() {
         //load in all the categories
         categoryDropdown.setItems(categoryRepository.getAllCategories());
         categoryDropdown.setButtonCell(new ListCell<Category>() {
             protected void updateItem(Category item, boolean empty) {
                 super.updateItem(item, empty);
-                if(item != null) {
-                    setText(item.getId() +" " + item.getName());
+                if (item != null) {
+                    setText(item.getId() + " " + item.getName());
                 } else {
                     setText(null);
                 }
@@ -146,7 +134,7 @@ public class IncomeController implements Initializable {
                     @Override
                     protected void updateItem(Category item, boolean empty) {
                         super.updateItem(item, empty);
-                        if(item != null) {
+                        if (item != null) {
                             setText(item.getName());
                         } else {
                             setText(null);
@@ -159,26 +147,31 @@ public class IncomeController implements Initializable {
         });
     }
 
-    //handle table click events
-    public void removeIncome(int id)
-    {
-        incomeRepository.deleteIncome(id);
+    public ObservableList<Expense> loadExpense() {
+        expenses = expenseRepository.getExpensesByMonth(new Date());
+
+        return expenses;
+    }
+
+    public ObservableList<Expense> loadExpense(Date date) {
+        expenses.clear();
+        expenses = expenseRepository.getExpensesByMonth(date);
+        return expenses;
     }
 
     @FXML
-    public void submitBtnAction(ActionEvent e)
-    {
+    public void submitBtnAction(ActionEvent e) {
         if(e.getSource().equals(submitBtn))
         {
             //perform action of adding income
             Category cat = (Category) categoryDropdown.getSelectionModel().getSelectedItem();
 
-            if(amountTxt.getText().isEmpty() || incomeDatePicker.getValue() == null || cat == null)
+            if(amountTxt.getText().isEmpty() || expenseDatePicker.getValue() == null || cat == null)
             {
                 AlertHelper.showErrorDialog("Form Error", null, "Please ensure all information is typed in");
             } else {
-                if(incomeRepository.addincome(Double.parseDouble(amountTxt.getText()), cat.getId(),
-                        Date.from(incomeDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), UserProperties.userId, Constants.credit))
+                if(expenseRepository.addExpense(Double.parseDouble(amountTxt.getText()), cat.getId(),
+                        Date.from(expenseDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), UserProperties.userId, Constants.credit))
                 {
                     submitBtn.getScene().getWindow().hide();
                 } else {
@@ -188,9 +181,8 @@ public class IncomeController implements Initializable {
         }
     }
 
-
     @FXML
-    public void cancelBtnAction()
+    public void canceBtnAction(ActionEvent e)
     {
         Stage stage = (Stage)cancelBtn.getScene().getWindow();
         stage.close();

@@ -1,5 +1,6 @@
 package Category;
 
+import Business.AlertHelper;
 import Models.Category;
 import Repositories.CategoryRepository;
 import com.jfoenix.controls.JFXButton;
@@ -42,14 +43,14 @@ public class CategoryController {
     {
         if(categoryName.getText().isEmpty())
         {
-            //error out TODO
+            AlertHelper.showErrorDialog("Form Error", null, "Please ensure all information is typed in");
         } else {
             if(categoryRepository.addCategory(categoryName.getText()))
             {
                 submitBtn.getScene().getWindow().hide();
 
             } else {
-                //show error when inputting the data TODO
+                AlertHelper.showErrorDialog("Unknown Error", null, "An unknown error has occurred. Be sure you are connected to internet");
             }
         }
     }

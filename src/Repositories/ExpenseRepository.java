@@ -88,6 +88,7 @@ public class ExpenseRepository extends BaseRepository
             statement = conn.prepareCall("{ call get_expense_by_month(?) }");
             statement.setDate(1, new java.sql.Date(date.getTime()));
             statement.execute();
+            result = statement.getResultSet();
 
             setExpense();
 
@@ -102,6 +103,7 @@ public class ExpenseRepository extends BaseRepository
 
         } catch(SQLException e) {
             e.printStackTrace();
+            AlertHelper.showExceptionDialog("Exception", null, "Error in Expense", e);
         }
 
 
@@ -112,7 +114,7 @@ public class ExpenseRepository extends BaseRepository
     {
         try {
             conn = DatabaseConnection.dbConnection();
-            statement = conn.prepareCall(" { add_expense(?,?,?,?,?) } ");
+            statement = conn.prepareCall(" { call add_expense(?,?,?,?,?) } ");
             statement.setDouble(1, amount);
             statement.setInt(2, categoryId);
             statement.setDate(3, new java.sql.Date(date.getTime()));
@@ -141,7 +143,7 @@ public class ExpenseRepository extends BaseRepository
     {
         try {
             conn = DatabaseConnection.dbConnection();
-            statement = conn.prepareCall("{ update_expense(?,?,?,?,?,?) }");
+            statement = conn.prepareCall("{ call update_expense(?,?,?,?,?,?) }");
             statement.setDouble(1, amount);
             statement.setInt(2, categoryId);
             statement.setDate(3, new java.sql.Date(date.getTime()));
@@ -190,14 +192,20 @@ public class ExpenseRepository extends BaseRepository
         return true;
     }
 
-    private void setExpense() throws SQLException {
-        while(result.next())
-        {
-            User user = new User(result.getInt(Constants.idUser), result.getString(Constants.firstname), result.getString(Constants.lastname), result.getString(Constants.username));
-            Category c = new Category(result.getInt(Constants.idCategory), result.getString(Constants.categoryName));
-            TransactionType t = new TransactionType(result.getInt(Constants.idTransactionType), result.getString(Constants.transactionName));
+    private void setExpense() {
 
-            expenses.add(new Expense(result.getInt(Constants.idExpense), result.getDouble(Constants.amount), result.getDate(Constants.date), c, t, user));
+        try {
+            while(result.next())
+            {
+                User user = new User(result.getInt(Constants.idUser), result.getString(Constants.firstname), result.getString(Constants.lastname), result.getString(Constants.username));
+                Category c = new Category(result.getInt(Constants.idCategory), result.getString(Constants.categoryName));
+                TransactionType t = new TransactionType(result.getInt(Constants.idTransactionType), result.getString(Constants.transactionName));
+
+                expenses.add(new Expense(result.getInt(Constants.idExpense), result.getDouble(Constants.amount), result.getDate(Constants.date), c, t, user));
+            }
+        } catch(Exception e) {
+            System.out.println(e);
         }
+
     }
 }

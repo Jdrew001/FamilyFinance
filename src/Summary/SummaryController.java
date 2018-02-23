@@ -3,6 +3,7 @@ package Summary;
 import Business.AlertHelper;
 import Business.SceneChanger;
 import Category.CategoryController;
+import Expense.ExpenseController;
 import Models.Income;
 import Models.User;
 import Income.IncomeController;
@@ -21,6 +22,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
+import javax.swing.*;
 import java.net.URL;
 import java.time.ZoneId;
 import java.util.Date;
@@ -31,16 +33,17 @@ public class SummaryController implements Initializable {
 
     //load in all controllers
     IncomeController incomeController = new IncomeController();
+    ExpenseController expenseController = new ExpenseController();
     CategoryController categoryController = new CategoryController();
 
     @FXML
-    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn, addIncome, removeIncome, addCategory;
+    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn, addIncome, removeIncome, addExpense, removeExpense, addCategory;
 
     @FXML
     JFXDatePicker incomeDatePicker, expenseDatePicker;
 
     @FXML
-    TableView financeTable;
+    TableView financeTable, expenseTable;
 
     @FXML
     ListView categoryListView;
@@ -50,17 +53,42 @@ public class SummaryController implements Initializable {
 
     //panes
     @FXML
-    AnchorPane summaryPane, financePane, categoryPane;
+    AnchorPane summaryPane, financePane, categoryPane, expensePane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         IncomeRepository incomeRepository = new IncomeRepository();
-        incomeAmount();
+        setCashBalance();
+    }
+
+    private void setCashBalance()
+    {
+        double total = 0;
+        total = incomeAmount() - expenseAmount();
+
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+
+        if (total > 0)
+        {
+            cashBalLbl.setTextFill(Color.GREEN);
+            cashBalLbl.setText("$" + decimalFormat.format(total));
+        }
+        else
+        {
+            cashBalLbl.setTextFill(Color.RED);
+            cashBalLbl.setText("($" + decimalFormat.format(total) + ")");
+        }
     }
 
     public void logout() {
         SceneChanger s = new SceneChanger();
         s.changeScene(logoutBtn, "../login/login.fxml", "Login");
+    }
+
+    @FXML
+    public void refreshData()
+    {
+        setCashBalance();
     }
 
     //Changing the view panes -- NAVIGATION
@@ -71,11 +99,12 @@ public class SummaryController implements Initializable {
             summaryPane.toFront();
 
         } else if (e.getSource() == incomeBtn) {
-            financePane.toFront();
-
+            financePane.toFront(); // income pane
         } else if (e.getSource() == categoriesBtn) {
             categoryPane.toFront();
             categoryController.loadItems(categoryListView);
+        } else if(e.getSource() == expensesBtn) {
+            expensePane.toFront();
         }
     }
 
@@ -88,11 +117,14 @@ public class SummaryController implements Initializable {
             incomeController.initializeTable(financeTable, incomeController.loadIncome(date));
 
         } else if (e.getSource().equals(expenseDatePicker)) {
-
+            expenseTable.getColumns().clear();
+            Date date = Date.from(expenseDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            System.out.println(date);
+            expenseController.initializeTable(expenseTable, expenseController.loadExpense(date));
         }
     }
 
-    private void incomeAmount() {
+    private double incomeAmount() {
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
         double totalIncomeAmount = incomeController.getIncomeAmount();
 
@@ -102,6 +134,29 @@ public class SummaryController implements Initializable {
             totalIncomeLbl.setTextFill(Color.RED);
 
         totalIncomeLbl.setText("$" + decimalFormat.format(totalIncomeAmount));
+
+        return totalIncomeAmount;
+    }
+
+    private double expenseAmount() {
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        double totalExpenseAmount = expenseController.getExpenseAmount();
+
+        if(totalExpenseAmount > 0)
+        {
+            totalExpenseLbl.setTextFill(Color.RED);
+            totalExpenseLbl.setText("($" + decimalFormat.format(totalExpenseAmount) + ")");
+        }
+        else
+        {
+            totalExpenseLbl.setTextFill(Color.GREEN);
+            totalExpenseLbl.setText("$" + decimalFormat.format(totalExpenseAmount));
+        }
+
+
+
+
+        return totalExpenseAmount;
     }
 
     @FXML
@@ -118,6 +173,14 @@ public class SummaryController implements Initializable {
         if (e.getSource().equals(addIncome)) {
             SceneChanger sceneChanger = new SceneChanger();
             sceneChanger.showPrompt("../Income/AddIncome.fxml", "Add Income");
+        }
+    }
+
+    @FXML
+    private void addNewExpense(ActionEvent e) {
+        if(e.getSource().equals(addExpense)) {
+            SceneChanger sceneChanger = new SceneChanger();
+            sceneChanger.showPrompt("../Expense/AddExpense.fxml", "Add Expense");
         }
     }
 

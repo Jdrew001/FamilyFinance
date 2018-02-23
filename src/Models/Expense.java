@@ -59,6 +59,8 @@ public class Expense {
         return category;
     }
 
+    public String getCategoryName() { return this.getCategory().getName(); }
+
     public void setCategory(Category category) {
         this.category = category;
     }
@@ -66,6 +68,8 @@ public class Expense {
     public TransactionType getTransactionType() {
         return transactionType;
     }
+
+    public String getTransactionName() { return getTransactionType().getName(); }
 
     public void setTransactionType(TransactionType transactionType) {
         this.transactionType = transactionType;
@@ -78,4 +82,6 @@ public class Expense {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public String getUsername() { return this.getUser().getUsername(); }
 }
