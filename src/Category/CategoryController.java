@@ -1,6 +1,7 @@
 package Category;
 
 import Business.AlertHelper;
+import Business.SceneChanger;
 import Models.Category;
 import Models.Income;
 import Repositories.CategoryRepository;
@@ -10,17 +11,30 @@ import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 
-public class CategoryController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class CategoryController implements Initializable {
 
     CategoryRepository categoryRepository = new CategoryRepository();
+    boolean isUpdate = false;
+    private int categoryId = 0;
+    private String categoryNameData = "";
 
     @FXML
     public JFXTextField categoryName;
     @FXML
     public JFXButton submitBtn, cancelBtn;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        categoryName.setText(categoryNameData);
+    }
+
     //load up date to list view
     public void loadItems(ListView<Category> categoryListView)
     {
@@ -48,12 +62,22 @@ public class CategoryController {
         {
             AlertHelper.showErrorDialog("Form Error", null, "Please ensure all information is typed in");
         } else {
-            if(categoryRepository.addCategory(categoryName.getText()))
+            if(isUpdate)
             {
-                submitBtn.getScene().getWindow().hide();
-
+                if(categoryRepository.updateCategory(categoryId, categoryName.getText()))
+                {
+                    submitBtn.getScene().getWindow().hide();
+                } else {
+                    AlertHelper.showErrorDialog("Unknown Error", null, "An unknown error has occurred. Be sure you are connected to internet");
+                }
             } else {
-                AlertHelper.showErrorDialog("Unknown Error", null, "An unknown error has occurred. Be sure you are connected to internet");
+                if(categoryRepository.addCategory(categoryName.getText()))
+                {
+                    submitBtn.getScene().getWindow().hide();
+
+                } else {
+                    AlertHelper.showErrorDialog("Unknown Error", null, "An unknown error has occurred. Be sure you are connected to internet");
+                }
             }
         }
     }
@@ -68,6 +92,18 @@ public class CategoryController {
         ObservableList<Category> categories = selectedItems;
         for (Category category:categories) {
             categoryRepository.deleteCategory(category.getId());
+        }
+    }
+
+    public void updateCategory(ObservableList selectedItems) {
+        ObservableList<Category> categories = selectedItems;
+        SceneChanger sceneChanger = new SceneChanger();
+        sceneChanger.showPrompt("../Category/AddCategory.fxml", "Add Category", submitBtn);
+        isUpdate = true;
+
+        for(Category category: categories)
+        {
+            categoryId = category.getId();
         }
     }
 }

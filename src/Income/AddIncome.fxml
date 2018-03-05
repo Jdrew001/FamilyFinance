@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="545.0" prefWidth="874.0" style="-fx-background-color: #2c3e50;" stylesheets="@../Resources/stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Income.IncomeController">
+<AnchorPane prefHeight="545.0" prefWidth="874.0" style="-fx-background-color: #2c3e50;" stylesheets="@../Resources/stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Income.AddIncomeController">
    <children>
       <JFXTextField fx:id="amountTxt" alignment="CENTER" focusColor="#3498db" layoutX="275.0" layoutY="112.0" prefHeight="54.0" prefWidth="325.0" promptText="   Amount" style="-fx-text-fill: #3498db; -fx-prompt-text-fill: #2980b9;" unFocusColor="#2980b9" AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="275.0" AnchorPane.topAnchor="112.0">
          <font>

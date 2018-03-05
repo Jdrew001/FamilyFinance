@@ -36,15 +36,16 @@ public class SummaryController implements Initializable {
     IncomeController incomeController = new IncomeController();
     ExpenseController expenseController = new ExpenseController();
     CategoryController categoryController = new CategoryController();
+    SceneChanger sceneChanger = new SceneChanger();
 
     @FXML
-    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn, addIncome, removeIncome, addExpense, removeExpense, addCategory, removeCategory;
+    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn, addExpense, removeExpense, addCategory, removeCategory;
 
     @FXML
-    JFXDatePicker incomeDatePicker, expenseDatePicker;
+    JFXDatePicker expenseDatePicker;
 
     @FXML
-    TableView financeTable, expenseTable;
+    TableView expenseTable;
 
     @FXML
     ListView categoryListView;
@@ -98,9 +99,8 @@ public class SummaryController implements Initializable {
         System.out.println(e.getSource());
         if (e.getSource() == summaryBtn) {
             summaryPane.toFront();
-
-        } else if (e.getSource() == incomeBtn) {
-            financePane.toFront(); // income pane
+        } else if(e.getSource() == incomeBtn) {
+            sceneChanger.showPrompt("../Income/income.fxml", "Income", incomeBtn);
         } else if (e.getSource() == categoriesBtn) {
             categoryPane.toFront();
             categoryController.loadItems(categoryListView);
@@ -112,12 +112,8 @@ public class SummaryController implements Initializable {
     //wire up the datepicker
     @FXML
     public void handleDatePicker(ActionEvent e) {
-        if (e.getSource().equals(incomeDatePicker)) {
-            financeTable.getColumns().clear();
-            Date date = Date.from(incomeDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            incomeController.initializeTable(financeTable, incomeController.loadIncome(date));
 
-        } else if (e.getSource().equals(expenseDatePicker)) {
+        if (e.getSource().equals(expenseDatePicker)) {
             expenseTable.getColumns().clear();
             Date date = Date.from(expenseDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             System.out.println(date);
@@ -154,26 +150,16 @@ public class SummaryController implements Initializable {
             totalExpenseLbl.setText("$" + decimalFormat.format(totalExpenseAmount));
         }
 
-
-
-
         return totalExpenseAmount;
     }
 
     @FXML
-    public void clickIncomeTableItem(MouseEvent event) {
-        if (event.getClickCount() == 1) {
-            Income.class.cast(financeTable.getSelectionModel().getSelectedItem());
-        } else if (event.getClickCount() == 2) {
-            handleDeletionIncome();
-        }
-    }
-
-    @FXML
-    private void addNewIncome(ActionEvent e) {
-        if (e.getSource().equals(addIncome)) {
-            SceneChanger sceneChanger = new SceneChanger();
-            sceneChanger.showPrompt("../Income/AddIncome.fxml", "Add Income");
+    public void clickCategoryListItem(MouseEvent event)
+    {
+        System.out.println("Working");
+        if(event.getClickCount() == 2)
+        {
+            categoryController.updateCategory(categoryListView.getSelectionModel().getSelectedItems());
         }
     }
 
@@ -181,16 +167,7 @@ public class SummaryController implements Initializable {
     private void addNewExpense(ActionEvent e) {
         if(e.getSource().equals(addExpense)) {
             SceneChanger sceneChanger = new SceneChanger();
-            sceneChanger.showPrompt("../Expense/AddExpense.fxml", "Add Expense");
-        }
-    }
-
-    @FXML
-    private void removeIncomeEntry(ActionEvent e)
-    {
-        if(e.getSource().equals(removeIncome)) {
-            if(financeTable.getSelectionModel().getSelectedItem() != null)
-                handleDeletionIncome();
+            sceneChanger.showPrompt("../Expense/AddExpense.fxml", "Add Expense", addExpense);
         }
     }
 
@@ -199,7 +176,7 @@ public class SummaryController implements Initializable {
         if(e.getSource().equals(addCategory))
         {
             SceneChanger sceneChanger = new SceneChanger();
-            sceneChanger.showPrompt("../Category/AddCategory.fxml", "Add Category");
+            sceneChanger.showPrompt("../Category/AddCategory.fxml", "Add Category", categoriesBtn);
         }
     }
 
@@ -209,18 +186,6 @@ public class SummaryController implements Initializable {
         {
             categoryController.removeItem(categoryListView.getSelectionModel().getSelectedItems());
             categoryController.loadItems(categoryListView);
-        }
-    }
-
-    private void handleDeletionIncome()
-    {
-        if(AlertHelper.showConfirmationDialog("Delete Confirmation",null, "Are you sure you want to delete this entry?"))
-        {
-            // Remove income and update table
-            incomeController.removeIncome(Income.class.cast(financeTable.getSelectionModel().getSelectedItem()).getIdIncome());
-            financeTable.getColumns().clear();
-            Date date = Date.from(incomeDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            incomeController.initializeTable(financeTable, incomeController.loadIncome(date));
         }
     }
 }

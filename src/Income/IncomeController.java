@@ -2,6 +2,7 @@ package Income;
 
 import Business.AlertHelper;
 import Business.Constants;
+import Business.SceneChanger;
 import Business.UserProperties;
 import Category.CategoryController;
 import Models.Category;
@@ -19,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -43,13 +45,15 @@ public class IncomeController implements Initializable {
     @FXML
     ComboBox categoryDropdown;
     @FXML
+    TableView financeTable;
+    @FXML
     JFXDatePicker incomeDatePicker;
     @FXML
-    JFXButton submitBtn, cancelBtn;
+    JFXButton submitBtn, cancelBtn, addIncome, removeIncome;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        loadChoiceBox();
+       // loadChoiceBox();
     }
 
     public double getIncomeAmount()
@@ -64,6 +68,42 @@ public class IncomeController implements Initializable {
         }
 
         return totalIncomeAmount;
+    }
+
+    @FXML
+    public void handleDatepicker(ActionEvent e)
+    {
+        if (e.getSource().equals(incomeDatePicker)) {
+            financeTable.getColumns().clear();
+            Date date = Date.from(incomeDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            initializeTable(financeTable, loadIncome(date));
+        }
+    }
+
+    @FXML
+    public void clickIncomeTableItem(MouseEvent event) {
+        if (event.getClickCount() == 1) {
+            Income.class.cast(financeTable.getSelectionModel().getSelectedItem());
+        } else if (event.getClickCount() == 2) {
+            handleDeletionIncome();
+        }
+    }
+
+    @FXML
+    private void addNewIncome(ActionEvent e) {
+        if (e.getSource().equals(addIncome)) {
+            SceneChanger sceneChanger = new SceneChanger();
+            sceneChanger.showPrompt("../Income/AddIncome.fxml", "Add Income", addIncome);
+        }
+    }
+
+    @FXML
+    private void removeIncomeEntry(ActionEvent e)
+    {
+        if(e.getSource().equals(removeIncome)) {
+            if(financeTable.getSelectionModel().getSelectedItem() != null)
+                handleDeletionIncome();
+        }
     }
 
     public ObservableList<Income> loadIncome()
@@ -123,76 +163,21 @@ public class IncomeController implements Initializable {
         table.getColumns().addAll(amountCol, date, username, category, transaction);
     }
 
-    //load choice box
-    public void loadChoiceBox()
-    {
-        //load in all the categories
-        categoryDropdown.setItems(categoryRepository.getAllCategories());
-        categoryDropdown.setButtonCell(new ListCell<Category>() {
-            protected void updateItem(Category item, boolean empty) {
-                super.updateItem(item, empty);
-                if(item != null) {
-                    setText(item.getId() +" " + item.getName());
-                } else {
-                    setText(null);
-                }
-            }
-        });
-        categoryDropdown.setCellFactory(new Callback<ListView<Category>, ListCell<Category>>() {
-            @Override
-            public ListCell call(ListView<Category> p) {
-
-                final ListCell<Category> cell = new ListCell<Category>() {
-                    @Override
-                    protected void updateItem(Category item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if(item != null) {
-                            setText(item.getName());
-                        } else {
-                            setText(null);
-                        }
-                    }
-                };
-
-                return cell;
-            }
-        });
-    }
-
     //handle table click events
     public void removeIncome(int id)
     {
         incomeRepository.deleteIncome(id);
     }
 
-    @FXML
-    public void submitBtnAction(ActionEvent e)
+    private void handleDeletionIncome()
     {
-        if(e.getSource().equals(submitBtn))
+        if(AlertHelper.showConfirmationDialog("Delete Confirmation",null, "Are you sure you want to delete this entry?"))
         {
-            //perform action of adding income
-            Category cat = (Category) categoryDropdown.getSelectionModel().getSelectedItem();
-
-            if(amountTxt.getText().isEmpty() || incomeDatePicker.getValue() == null || cat == null)
-            {
-                AlertHelper.showErrorDialog("Form Error", null, "Please ensure all information is typed in");
-            } else {
-                if(incomeRepository.addincome(Double.parseDouble(amountTxt.getText()), cat.getId(),
-                        Date.from(incomeDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), UserProperties.userId, Constants.credit))
-                {
-                    submitBtn.getScene().getWindow().hide();
-                } else {
-                    AlertHelper.showErrorDialog("Unknown Error", null, "An unknown error has occurred. Be sure you are connected to internet");
-                }
-            }
+            // Remove income and update table
+            removeIncome(Income.class.cast(financeTable.getSelectionModel().getSelectedItem()).getIdIncome());
+            financeTable.getColumns().clear();
+            Date date = Date.from(incomeDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            initializeTable(financeTable, loadIncome(date));
         }
-    }
-
-
-    @FXML
-    public void cancelBtnAction()
-    {
-        Stage stage = (Stage)cancelBtn.getScene().getWindow();
-        stage.close();
     }
 }
