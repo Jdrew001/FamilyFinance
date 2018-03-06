@@ -2,9 +2,11 @@ package Expense;
 
 import Business.AlertHelper;
 import Business.Constants;
+import Business.SceneChanger;
 import Business.UserProperties;
 import Models.Category;
 import Models.Expense;
+import Models.Income;
 import javafx.event.ActionEvent;
 import Repositories.CategoryRepository;
 import Repositories.ExpenseRepository;
@@ -18,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -29,26 +32,22 @@ import java.util.ResourceBundle;
 
 public class ExpenseController implements Initializable {
 
+    //FXML components
+    @FXML
+    public JFXButton addExpense, removeExpense;
+
+    @FXML
+    TableView expenseTable;
+    @FXML
+    JFXDatePicker expenseDatePicker;
+
     ExpenseRepository expenseRepository = new ExpenseRepository();
     public ObservableList<Expense> expenses = FXCollections.observableArrayList();
-    CategoryRepository categoryRepository = new CategoryRepository();
     double totalExpenseAmount = 0.0;
-
-    @FXML
-    public JFXTextField amountTxt;
-
-    @FXML
-    public ComboBox categoryDropdown;
-
-    @FXML
-    public JFXDatePicker expenseDatePicker;
-
-    @FXML
-    public JFXButton submitBtn, cancelBtn;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        loadChoiceBox();
+
     }
 
     public double getExpenseAmount()
@@ -90,11 +89,6 @@ public class ExpenseController implements Initializable {
             }
         });
 
-        for(int i = 0; i < 2; i++)
-        {
-            System.out.println(expenses.get(i).getUser().getUsername());
-        }
-
         TableColumn date = new TableColumn("Date");
         date.setMinWidth(200);
         date.setCellValueFactory(new PropertyValueFactory<Expense, Date>("date"));
@@ -113,78 +107,66 @@ public class ExpenseController implements Initializable {
 
     }
 
-    public void loadChoiceBox() {
-        //load in all the categories
-        categoryDropdown.setItems(categoryRepository.getAllCategories());
-        categoryDropdown.setButtonCell(new ListCell<Category>() {
-            protected void updateItem(Category item, boolean empty) {
-                super.updateItem(item, empty);
-                if (item != null) {
-                    setText(item.getId() + " " + item.getName());
-                } else {
-                    setText(null);
-                }
-            }
-        });
-        categoryDropdown.setCellFactory(new Callback<ListView<Category>, ListCell<Category>>() {
-            @Override
-            public ListCell call(ListView<Category> p) {
-
-                final ListCell<Category> cell = new ListCell<Category>() {
-                    @Override
-                    protected void updateItem(Category item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item != null) {
-                            setText(item.getName());
-                        } else {
-                            setText(null);
-                        }
-                    }
-                };
-
-                return cell;
-            }
-        });
-    }
-
-    public ObservableList<Expense> loadExpense() {
-        expenses = expenseRepository.getExpensesByMonth(new Date());
-
-        return expenses;
-    }
-
-    public ObservableList<Expense> loadExpense(Date date) {
-        expenses.clear();
-        expenses = expenseRepository.getExpensesByMonth(date);
-        return expenses;
-    }
-
     @FXML
-    public void submitBtnAction(ActionEvent e) {
-        if(e.getSource().equals(submitBtn))
-        {
-            //perform action of adding income
-            Category cat = (Category) categoryDropdown.getSelectionModel().getSelectedItem();
+    public void handleDatePicker(ActionEvent e) {
 
-            if(amountTxt.getText().isEmpty() || expenseDatePicker.getValue() == null || cat == null)
-            {
-                AlertHelper.showErrorDialog("Form Error", null, "Please ensure all information is typed in");
-            } else {
-                if(expenseRepository.addExpense(Double.parseDouble(amountTxt.getText()), cat.getId(),
-                        Date.from(expenseDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), UserProperties.userId, Constants.credit))
-                {
-                    submitBtn.getScene().getWindow().hide();
-                } else {
-                    AlertHelper.showErrorDialog("Unknown Error", null, "An unknown error has occurred. Be sure you are connected to internet");
-                }
-            }
+        if (e.getSource().equals(expenseDatePicker)) {
+            expenseTable.getColumns().clear();
+            Date date = Date.from(expenseDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            System.out.println(date);
+            initializeTable(expenseTable, loadExpense(date));
         }
     }
 
     @FXML
-    public void canceBtnAction(ActionEvent e)
+    public void clickExpenseTableItem(MouseEvent event) {
+        if (event.getClickCount() == 1) {
+            Income.class.cast(expenseTable.getSelectionModel().getSelectedItem());
+        } else if (event.getClickCount() == 2) {
+            handleDeletionIncome();
+        }
+    }
+
+    @FXML
+    private void addNewExpense(ActionEvent e) {
+        if(e.getSource().equals(addExpense)) {
+            SceneChanger sceneChanger = new SceneChanger();
+            sceneChanger.showPrompt("../Expense/AddExpense.fxml", "Add Expense", addExpense);
+        }
+    }
+
+    @FXML
+    private void removeExpenseEntry(ActionEvent e)
     {
-        Stage stage = (Stage)cancelBtn.getScene().getWindow();
-        stage.close();
+        if(e.getSource().equals(removeExpense)) {
+            if(expenseTable.getSelectionModel().getSelectedItem() != null)
+                handleDeletionIncome();
+        }
+    }
+
+    public ObservableList<Expense> loadExpense(Date date) {
+        expenses.clear();
+        System.out.println("Called");
+        expenses = expenseRepository.getExpensesByMonth(date);
+        System.out.println(expenses);
+        return expenses;
+    }
+
+    //handle table click events
+    public void removeIncome(int id)
+    {
+        expenseRepository.deleteExpense(id);
+    }
+
+    private void handleDeletionIncome()
+    {
+        if(AlertHelper.showConfirmationDialog("Delete Confirmation",null, "Are you sure you want to delete this entry?"))
+        {
+            // Remove income and update table
+            removeIncome(Income.class.cast(expenseTable.getSelectionModel().getSelectedItem()).getIdIncome());
+            expenseTable.getColumns().clear();
+            Date date = Date.from(expenseDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            initializeTable(expenseTable, loadExpense(date));
+        }
     }
 }

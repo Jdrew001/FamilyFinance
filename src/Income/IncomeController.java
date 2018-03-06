@@ -41,15 +41,11 @@ public class IncomeController implements Initializable {
 
     //Input fields for new income prompt
     @FXML
-    JFXTextField amountTxt;
-    @FXML
-    ComboBox categoryDropdown;
-    @FXML
     TableView financeTable;
     @FXML
     JFXDatePicker incomeDatePicker;
     @FXML
-    JFXButton submitBtn, cancelBtn, addIncome, removeIncome;
+    JFXButton addIncome, removeIncome;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

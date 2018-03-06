@@ -105,19 +105,7 @@ public class SummaryController implements Initializable {
             categoryPane.toFront();
             categoryController.loadItems(categoryListView);
         } else if(e.getSource() == expensesBtn) {
-            expensePane.toFront();
-        }
-    }
-
-    //wire up the datepicker
-    @FXML
-    public void handleDatePicker(ActionEvent e) {
-
-        if (e.getSource().equals(expenseDatePicker)) {
-            expenseTable.getColumns().clear();
-            Date date = Date.from(expenseDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            System.out.println(date);
-            expenseController.initializeTable(expenseTable, expenseController.loadExpense(date));
+            sceneChanger.showPrompt("../Expense/Expense.fxml", "Expense", expensesBtn);
         }
     }
 
@@ -160,14 +148,6 @@ public class SummaryController implements Initializable {
         if(event.getClickCount() == 2)
         {
             categoryController.updateCategory(categoryListView.getSelectionModel().getSelectedItems());
-        }
-    }
-
-    @FXML
-    private void addNewExpense(ActionEvent e) {
-        if(e.getSource().equals(addExpense)) {
-            SceneChanger sceneChanger = new SceneChanger();
-            sceneChanger.showPrompt("../Expense/AddExpense.fxml", "Add Expense", addExpense);
         }
     }
 
