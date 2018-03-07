@@ -128,8 +128,10 @@ public class CategoryController implements Initializable {
                 //Set the update category has changed and is update to false so that this won't run anylonger
                 UpdateCategory.hasChanged = false; //changed in the Add Category class
                 UpdateCategory.isUpdate = false; // changed above and checked in the category file
-
-                loadItems(categoryListView);
+                UpdateCategory.newCategory = false;
+                FxTimer.runLater(Duration.ofSeconds(2), () -> {
+                    loadItems(categoryListView);
+                });
                 timer.stop();
             }
         });
