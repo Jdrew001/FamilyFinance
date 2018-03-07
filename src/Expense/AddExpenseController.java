@@ -90,12 +90,17 @@ public class AddExpenseController implements Initializable {
             {
                 AlertHelper.showErrorDialog("Form Error", null, "Please ensure all information is typed in");
             } else {
-                if(expenseRepository.addExpense(Double.parseDouble(amountTxt.getText()), cat.getId(),
-                        Date.from(expenseDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), UserProperties.userId, Constants.credit))
-                {
-                    submitBtn.getScene().getWindow().hide();
-                } else {
-                    AlertHelper.showErrorDialog("Unknown Error", null, "An unknown error has occurred. Be sure you are connected to internet");
+                try {
+                    if(expenseRepository.addExpense(Double.parseDouble(amountTxt.getText()), cat.getId(),
+                            Date.from(expenseDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), UserProperties.userId, Constants.credit))
+                    {
+                        submitBtn.getScene().getWindow().hide();
+                        UpdateExpense.newExpense = true;
+                    } else {
+                        AlertHelper.showErrorDialog("Unknown Error", null, "An unknown error has occurred. Be sure you are connected to internet");
+                    }
+                } catch(Exception ex) {
+                    AlertHelper.showErrorDialog("Form Error", null, "Please ensure that only correct data is entered");
                 }
             }
         }

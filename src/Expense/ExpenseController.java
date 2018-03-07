@@ -23,9 +23,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.reactfx.util.FxTimer;
+import org.reactfx.util.Timer;
 
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.time.Duration;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -44,10 +47,11 @@ public class ExpenseController implements Initializable {
     ExpenseRepository expenseRepository = new ExpenseRepository();
     public ObservableList<Expense> expenses = FXCollections.observableArrayList();
     double totalExpenseAmount = 0.0;
+    private Timer timer;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        initializeTable(expenseTable, loadExpense(new Date()));
     }
 
     public double getExpenseAmount()
@@ -132,6 +136,8 @@ public class ExpenseController implements Initializable {
         if(e.getSource().equals(addExpense)) {
             SceneChanger sceneChanger = new SceneChanger();
             sceneChanger.showPrompt("../Expense/AddExpense.fxml", "Add Expense", addExpense);
+
+            refreshTableDynamically();
         }
     }
 
@@ -168,5 +174,17 @@ public class ExpenseController implements Initializable {
             Date date = Date.from(expenseDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             initializeTable(expenseTable, loadExpense(date));
         }
+    }
+
+    private void refreshTableDynamically() {
+        //run the timer to make sure that once user is finished with the update, the table gets updated
+        timer = FxTimer.runPeriodically(Duration.ofMillis(10), () -> {
+            if(UpdateExpense.newExpense)
+            {
+                UpdateExpense.newExpense = false;
+                FxTimer.runLater(Duration.ofSeconds(2), () -> loadExpense(new Date()));
+                timer.stop();
+            }
+        });
     }
 }

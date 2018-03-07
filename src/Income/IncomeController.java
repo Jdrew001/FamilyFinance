@@ -24,9 +24,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import org.reactfx.util.FxTimer;
+import org.reactfx.util.Timer;
 
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.time.Duration;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +41,7 @@ public class IncomeController implements Initializable {
     IncomeRepository incomeRepository = new IncomeRepository();
     CategoryRepository categoryRepository = new CategoryRepository();
     double totalIncomeAmount = 0.0;
+    private Timer timer;
 
     //Input fields for new income prompt
     @FXML
@@ -49,7 +53,7 @@ public class IncomeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-       // loadChoiceBox();
+        initializeTable(financeTable, loadIncome(new Date()));
     }
 
     public double getIncomeAmount()
@@ -80,9 +84,19 @@ public class IncomeController implements Initializable {
     public void clickIncomeTableItem(MouseEvent event) {
         if (event.getClickCount() == 1) {
             Income.class.cast(financeTable.getSelectionModel().getSelectedItem());
-        } else if (event.getClickCount() == 2) {
-            handleDeletionIncome();
         }
+    }
+
+    private void refreshTableDynamically() {
+        //run the timer to make sure that once user is finished with the update, the table gets updated
+        timer = FxTimer.runPeriodically(Duration.ofMillis(10), () -> {
+            if(UpdateIncome.newIncome)
+            {
+                UpdateIncome.newIncome = false;
+                FxTimer.runLater(Duration.ofSeconds(2), () -> loadIncome(new Date()));
+                timer.stop();
+            }
+        });
     }
 
     @FXML
@@ -90,6 +104,8 @@ public class IncomeController implements Initializable {
         if (e.getSource().equals(addIncome)) {
             SceneChanger sceneChanger = new SceneChanger();
             sceneChanger.showPrompt("../Income/AddIncome.fxml", "Add Income", addIncome);
+
+            refreshTableDynamically();
         }
     }
 

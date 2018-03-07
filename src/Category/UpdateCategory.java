@@ -3,17 +3,6 @@ package Category;
 import Models.Category;
 
 
-/*
-*
-*
-*
-*
-*
-*
-*
-*
-* */
-
 public class UpdateCategory {
 
     public static Category category;

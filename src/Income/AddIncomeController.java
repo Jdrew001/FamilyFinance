@@ -3,6 +3,7 @@ package Income;
 import Business.AlertHelper;
 import Business.Constants;
 import Business.UserProperties;
+import Category.UpdateCategory;
 import Models.Category;
 import Repositories.CategoryRepository;
 import Repositories.IncomeRepository;
@@ -13,12 +14,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -27,6 +30,9 @@ public class AddIncomeController implements Initializable {
 
     @FXML
     JFXTextField amountTxt;
+
+    @FXML
+    Label headerTxt;
 
     @FXML
     JFXDatePicker incomeDatePicker;
@@ -93,12 +99,17 @@ public class AddIncomeController implements Initializable {
             {
                 AlertHelper.showErrorDialog("Form Error", null, "Please ensure all information is typed in");
             } else {
-                if(incomeRepository.addincome(Double.parseDouble(amountTxt.getText()), cat.getId(),
-                        Date.from(incomeDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), UserProperties.userId, Constants.credit))
-                {
-                    submitBtn.getScene().getWindow().hide();
-                } else {
-                    AlertHelper.showErrorDialog("Unknown Error", null, "An unknown error has occurred. Be sure you are connected to internet");
+                try {
+                    if(incomeRepository.addincome(Double.parseDouble(amountTxt.getText()), cat.getId(),
+                            Date.from(incomeDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), UserProperties.userId, Constants.credit))
+                    {
+                        submitBtn.getScene().getWindow().hide();
+                        UpdateIncome.newIncome = true;
+                    } else {
+                        AlertHelper.showErrorDialog("Unknown Error", null, "An unknown error has occurred. Be sure you are connected to internet");
+                    }
+                } catch(Exception ex) {
+                    AlertHelper.showErrorDialog("Form Error", null, "Please ensure that only correct data is entered");
                 }
             }
         }
