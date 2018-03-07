@@ -29,6 +29,9 @@ public class Constants {
     public static final String transactionName = "transactionname";
     public static final String idTransactionType = "idtransactiontype";
 
+    //journal entries
+    public static final String idJournal = "idJournal";
+
     //Transactions
     public static final int debit = 1;
     public static final int credit = 2;
