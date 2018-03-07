@@ -2,6 +2,7 @@ package Category;
 
 import Business.AlertHelper;
 import Business.SceneChanger;
+import Business.TimeHelper;
 import Models.Category;
 import Models.Income;
 import Repositories.CategoryRepository;
@@ -10,29 +11,37 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
+import org.reactfx.util.FxTimer;
 
 import java.net.URL;
+import java.time.Duration;
 import java.util.ResourceBundle;
+import org.reactfx.util.Timer;
 
 public class CategoryController implements Initializable {
 
     CategoryRepository categoryRepository = new CategoryRepository();
-    boolean isUpdate = false;
+
     private int categoryId = 0;
-    private String categoryNameData = "";
+    boolean isUpdate = false;
+    private Timer timer;
+    private boolean newCategory = false;
 
     @FXML
-    public JFXTextField categoryName;
+    public JFXButton addCategory, removeCategory;
+
     @FXML
-    public JFXButton submitBtn, cancelBtn;
+    ListView categoryListView;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        categoryName.setText(categoryNameData);
+        loadItems(categoryListView);
     }
 
     //load up date to list view
@@ -56,36 +65,51 @@ public class CategoryController implements Initializable {
     }
 
     @FXML
-    public void createCategory()
-    {
-        if(categoryName.getText().isEmpty())
+    public void addNewCategory(ActionEvent e) {
+        if(e.getSource().equals(addCategory))
         {
-            AlertHelper.showErrorDialog("Form Error", null, "Please ensure all information is typed in");
-        } else {
-            if(isUpdate)
-            {
-                if(categoryRepository.updateCategory(categoryId, categoryName.getText()))
-                {
-                    submitBtn.getScene().getWindow().hide();
-                } else {
-                    AlertHelper.showErrorDialog("Unknown Error", null, "An unknown error has occurred. Be sure you are connected to internet");
-                }
-            } else {
-                if(categoryRepository.addCategory(categoryName.getText()))
-                {
-                    submitBtn.getScene().getWindow().hide();
-
-                } else {
-                    AlertHelper.showErrorDialog("Unknown Error", null, "An unknown error has occurred. Be sure you are connected to internet");
-                }
-            }
+            SceneChanger sceneChanger = new SceneChanger();
+            sceneChanger.showPrompt("../Category/AddCategory.fxml", "Add Category", addCategory);
+            refreshTableDynamically();
         }
     }
 
     @FXML
-    public void cancelWindow()
+    public void removeCategory(ActionEvent e) {
+        if(e.getSource().equals(removeCategory))
+        {
+            removeItem(categoryListView.getSelectionModel().getSelectedItems());
+            loadItems(categoryListView);
+        }
+    }
+
+    @FXML
+    public void clickCategoryListItem(MouseEvent event)
     {
-        cancelBtn.getScene().getWindow().hide();
+        System.out.println("Working");
+        if(event.getClickCount() == 2)
+        {
+            updateCategory(categoryListView.getSelectionModel().getSelectedItems());
+        }
+    }
+
+    public void updateCategory(ObservableList selectedItems) {
+        ObservableList<Category> categories = selectedItems;
+        SceneChanger sceneChanger = new SceneChanger();
+        //set the update to be true
+        isUpdate = true;
+
+        for(Category category: categories)
+        {
+            Category categoryModel = new Category(category.getId(), category.getName());
+            UpdateCategory.category = categoryModel;
+            UpdateCategory.isUpdate = isUpdate;
+        }
+
+        //show the prompt to update the view
+        sceneChanger.showPrompt("../Category/AddCategory.fxml", "Add Category", addCategory);
+        refreshTableDynamically();
+
     }
 
     public void removeItem(ObservableList selectedItems) {
@@ -95,15 +119,19 @@ public class CategoryController implements Initializable {
         }
     }
 
-    public void updateCategory(ObservableList selectedItems) {
-        ObservableList<Category> categories = selectedItems;
-        SceneChanger sceneChanger = new SceneChanger();
-        sceneChanger.showPrompt("../Category/AddCategory.fxml", "Add Category", submitBtn);
-        isUpdate = true;
+    private void refreshTableDynamically()
+    {
+        //run the timer to make sure that once user is finished with the update, the table gets updated
+        timer = FxTimer.runPeriodically(Duration.ofMillis(10), () -> {
+            if(UpdateCategory.isUpdate && UpdateCategory.hasChanged || UpdateCategory.newCategory)
+            {
+                //Set the update category has changed and is update to false so that this won't run anylonger
+                UpdateCategory.hasChanged = false; //changed in the Add Category class
+                UpdateCategory.isUpdate = false; // changed above and checked in the category file
 
-        for(Category category: categories)
-        {
-            categoryId = category.getId();
-        }
+                loadItems(categoryListView);
+                timer.stop();
+            }
+        });
     }
 }

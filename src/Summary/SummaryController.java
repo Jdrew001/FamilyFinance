@@ -39,27 +39,17 @@ public class SummaryController implements Initializable {
     SceneChanger sceneChanger = new SceneChanger();
 
     @FXML
-    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn, addExpense, removeExpense, addCategory, removeCategory;
-
-    @FXML
-    JFXDatePicker expenseDatePicker;
-
-    @FXML
-    TableView expenseTable;
-
-    @FXML
-    ListView categoryListView;
+    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn;
 
     @FXML
     Label beginningBalLbl, totalIncomeLbl, totalExpenseLbl, totalSavingsLbl, cashBalLbl;
 
     //panes
     @FXML
-    AnchorPane summaryPane, financePane, categoryPane, expensePane;
+    AnchorPane summaryPane, categoryPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        IncomeRepository incomeRepository = new IncomeRepository();
         setCashBalance();
     }
 
@@ -102,8 +92,7 @@ public class SummaryController implements Initializable {
         } else if(e.getSource() == incomeBtn) {
             sceneChanger.showPrompt("../Income/income.fxml", "Income", incomeBtn);
         } else if (e.getSource() == categoriesBtn) {
-            categoryPane.toFront();
-            categoryController.loadItems(categoryListView);
+            sceneChanger.showPrompt("../Category/Category.fxml", "Categories", categoriesBtn);
         } else if(e.getSource() == expensesBtn) {
             sceneChanger.showPrompt("../Expense/Expense.fxml", "Expense", expensesBtn);
         }
@@ -139,33 +128,5 @@ public class SummaryController implements Initializable {
         }
 
         return totalExpenseAmount;
-    }
-
-    @FXML
-    public void clickCategoryListItem(MouseEvent event)
-    {
-        System.out.println("Working");
-        if(event.getClickCount() == 2)
-        {
-            categoryController.updateCategory(categoryListView.getSelectionModel().getSelectedItems());
-        }
-    }
-
-    @FXML
-    public void addNewCategory(ActionEvent e) {
-        if(e.getSource().equals(addCategory))
-        {
-            SceneChanger sceneChanger = new SceneChanger();
-            sceneChanger.showPrompt("../Category/AddCategory.fxml", "Add Category", categoriesBtn);
-        }
-    }
-
-    @FXML
-    public void removeCategory(ActionEvent e) {
-        if(e.getSource().equals(removeCategory))
-        {
-            categoryController.removeItem(categoryListView.getSelectionModel().getSelectedItems());
-            categoryController.loadItems(categoryListView);
-        }
     }
 }
