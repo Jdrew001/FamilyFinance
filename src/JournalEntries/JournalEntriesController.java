@@ -1,5 +1,6 @@
 package JournalEntries;
 
+import Business.AlertHelper;
 import Business.SceneChanger;
 import Models.Income;
 import Models.JournalEntries;
@@ -9,6 +10,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableCell;
@@ -17,10 +19,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -90,17 +91,39 @@ public class JournalEntriesController implements Initializable {
     }
 
     @FXML
-    public void addJournal()
+    public void addJournal(ActionEvent event)
     {
-        SceneChanger changer = new SceneChanger();
-        changer.showPrompt(AddJournalController.class.getResource("AddJournal.fxml"), "Add Journal", addJournal);
+        if(event.getSource() == addJournal)
+        {
+            SceneChanger changer = new SceneChanger();
+            changer.showPrompt(AddJournalController.class.getResource("AddJournal.fxml"), "Add Journal", addJournal);
+        }
     }
 
     @FXML
-    public void deleteJournal()
+    public void deleteJournal(ActionEvent event)
     {
         //remove event
+        if(event.getSource() == removeJournal)
+        {
+            if(journalTable.getSelectionModel().getSelectedItem() != null)
+                handleDeletionJournal();
+        }
+    }
 
+    private void removeJournal(int id)
+    {
+        journalRepository.deleteJournalEntry(id);
+    }
+
+    private void handleDeletionJournal()
+    {
+        if(AlertHelper.showConfirmationDialog("Delete Confirmation", null, "Are you sure you want to delete this entry?"))
+        {
+            removeJournal(JournalEntries.class.cast(journalTable.getSelectionModel().getSelectedItem()).getIdJournal());
+            journalTable.getColumns().clear();
+            initializeTable(journalTable, loadJournals(new Date()));
+        }
     }
 
     public ObservableList<JournalEntries> loadJournals(Date date)

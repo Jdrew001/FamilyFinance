@@ -188,8 +188,7 @@ public class IncomeController implements Initializable {
             // Remove income and update table
             removeIncome(Income.class.cast(financeTable.getSelectionModel().getSelectedItem()).getIdIncome());
             financeTable.getColumns().clear();
-            Date date = Date.from(incomeDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            initializeTable(financeTable, loadIncome(date));
+            initializeTable(financeTable, loadIncome(new Date()));
         }
     }
 }
