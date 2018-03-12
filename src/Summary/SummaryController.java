@@ -4,6 +4,7 @@ import Business.AlertHelper;
 import Business.SceneChanger;
 import Category.CategoryController;
 import Expense.ExpenseController;
+import JournalEntries.JournalEntriesController;
 import Models.Income;
 import Models.User;
 import Income.IncomeController;
@@ -74,7 +75,7 @@ public class SummaryController implements Initializable {
 
     public void logout() {
         SceneChanger s = new SceneChanger();
-        s.changeScene(logoutBtn, "../login/login.fxml", "Login");
+        s.changeScene(logoutBtn, "/login/login.fxml", "Login");
     }
 
     @FXML
@@ -90,11 +91,13 @@ public class SummaryController implements Initializable {
         if (e.getSource() == summaryBtn) {
             summaryPane.toFront();
         } else if(e.getSource() == incomeBtn) {
-            sceneChanger.showPrompt("../Income/income.fxml", "Income", incomeBtn);
+            sceneChanger.showPrompt(IncomeController.class.getResource("Income.fxml"), "Income", incomeBtn);
         } else if (e.getSource() == categoriesBtn) {
-            sceneChanger.showPrompt("../Category/Category.fxml", "Categories", categoriesBtn);
+            sceneChanger.showPrompt(CategoryController.class.getResource("Category.fxml"), "Categories", categoriesBtn);
         } else if(e.getSource() == expensesBtn) {
-            sceneChanger.showPrompt("../Expense/Expense.fxml", "Expense", expensesBtn);
+            sceneChanger.showPrompt(ExpenseController.class.getResource("Expense.fxml"), "Expense", expensesBtn);
+        } else if(e.getSource() == journalBtn) {
+            sceneChanger.showPrompt(JournalEntriesController.class.getResource("JournalEntries.fxml"), "Journal Entries", journalBtn);
         }
     }
 

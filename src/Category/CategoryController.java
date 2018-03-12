@@ -69,7 +69,7 @@ public class CategoryController implements Initializable {
         if(e.getSource().equals(addCategory))
         {
             SceneChanger sceneChanger = new SceneChanger();
-            sceneChanger.showPrompt("../Category/AddCategory.fxml", "Add Category", addCategory);
+            sceneChanger.showPrompt(AddCategory.class.getResource("AddCategory.fxml"), "Add Category", addCategory);
             refreshTableDynamically();
         }
     }
@@ -107,7 +107,7 @@ public class CategoryController implements Initializable {
         }
 
         //show the prompt to update the view
-        sceneChanger.showPrompt("../Category/AddCategory.fxml", "Add Category", addCategory);
+        sceneChanger.showPrompt(AddCategory.class.getResource("AddCategory.fxml"), "Add Category", addCategory);
         refreshTableDynamically();
 
     }

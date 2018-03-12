@@ -1,11 +1,14 @@
 package Business;
 
+import Income.IncomeController;
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.net.URL;
 
 public class SceneChanger {
 
@@ -30,11 +33,11 @@ public class SceneChanger {
         }
     }
 
-    public void showPrompt(String scenePath, String title, JFXButton button)
+    public void showPrompt(URL url, String title, JFXButton button)
     {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource(scenePath));
+            fxmlLoader.setLocation(url);
             /*
              * if "fx:controller" is not set in fxml
              * fxmlLoader.setController(NewWindowController);

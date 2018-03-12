@@ -9,6 +9,7 @@ public class JournalEntries {
     private double amount;
     private String categoryName;
     private String transactionName;
+    private String description;
 
     public JournalEntries()
     {
@@ -17,15 +18,17 @@ public class JournalEntries {
         setAmount(0.0);
         setCategoryName("");
         setTransactionName("");
+        setDescription("");
     }
 
-    public JournalEntries(int idJournal, Date date, double amount, String categoryName, String transactionName)
+    public JournalEntries(int idJournal, Date date, double amount, String categoryName, String transactionName, String description)
     {
         setIdJournal(idJournal);
         setDate(date);
         setAmount(amount);
         setCategoryName(categoryName);
         setTransactionName(transactionName);
+        setDescription(description);
     }
 
     public int getIdJournal() {
@@ -68,5 +71,10 @@ public class JournalEntries {
         this.transactionName = transactionName;
     }
 
+    public String getDescription() { return description; }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
 }

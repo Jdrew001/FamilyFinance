@@ -45,7 +45,7 @@ public class JournalRepository extends BaseRepository {
         try {
 
             conn = DatabaseConnection.dbConnection();
-            statement = conn.prepareCall("{ get_journal_from_month(?) }");
+            statement = conn.prepareCall("{ call get_journal_from_month(?) }");
             statement.setDate(1, new java.sql.Date(date.getTime()));
             statement.execute();
             result =  statement.getResultSet();
@@ -76,7 +76,7 @@ public class JournalRepository extends BaseRepository {
         try {
 
             conn = DatabaseConnection.dbConnection();
-            statement = conn.prepareCall("{ get_from_journal_by_id(?) }");
+            statement = conn.prepareCall("{ call get_from_journal_by_id(?) }");
             statement.setInt(1, id);
             statement.execute();
 
@@ -86,7 +86,7 @@ public class JournalRepository extends BaseRepository {
             {
                 journalEntries = new JournalEntries(result.getInt(Constants.idJournal),
                         result.getDate(Constants.date), result.getDouble(Constants.amount), result.getString(Constants.categoryName),
-                        result.getString(Constants.transactionName));
+                        result.getString(Constants.transactionName), result.getString(Constants.description));
             }
 
             try {
@@ -113,7 +113,7 @@ public class JournalRepository extends BaseRepository {
         try {
 
             conn = DatabaseConnection.dbConnection();
-            statement = conn.prepareCall("create_journal(?,?,?,?,?)");
+            statement = conn.prepareCall("{ call create_journal(?,?,?,?,?) }");
             statement.setDate(1, new java.sql.Date(date.getTime()));
             statement.setInt(2, categoryId);
             statement.setString(3, description);
@@ -141,7 +141,7 @@ public class JournalRepository extends BaseRepository {
     {
         try {
             conn = DatabaseConnection.dbConnection();
-            statement = conn.prepareCall("{ delete_journal(?) }");
+            statement = conn.prepareCall("{ call delete_journal(?) }");
             statement.setInt(1, id);
             statement.execute();
 
@@ -164,9 +164,10 @@ public class JournalRepository extends BaseRepository {
     private void setJournalEntries() throws SQLException {
         while(result.next())
         {
+            System.out.println("called");
             journalEntries.add(new JournalEntries(result.getInt(Constants.idJournal),
                     result.getDate(Constants.date), result.getDouble(Constants.amount), result.getString(Constants.categoryName),
-                    result.getString(Constants.transactionName)));
+                    result.getString(Constants.transactionName), result.getString(Constants.description)));
         }
     }
 }

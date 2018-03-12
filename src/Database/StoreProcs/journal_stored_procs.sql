@@ -4,7 +4,7 @@
 DELIMITER //
 CREATE PROCEDURE get_all_from_journal()
 	BEGIN
-		SELECT j.idjournal, j.date, j.amount, c.name AS 'categoryname', t.name AS 'transactionname' FROM journal j, category c, transactiontype t
+		SELECT j.idjournal, j.date, j.amount, j.description, c.name AS 'categoryname', t.name AS 'transactionname' FROM journal j, category c, transactiontype t
         WHERE j.category = c.idcategory AND j.transactionid = t.idtransactionType;
     END //
 DELIMITER ;
@@ -15,7 +15,7 @@ call get_all_from_journal();
 DELIMITER //
 CREATE PROCEDURE get_from_journal_by_id(IN ID INTEGER)
 	BEGIN
-		SELECT j.idjournal, j.date, j.amount, c.name AS 'categoryname', t.name AS 'transactionname' 
+		SELECT j.idjournal, j.date, j.amount, j.description, c.name AS 'categoryname', t.name AS 'transactionname' 
         FROM journal j, category c, transactiontype t
         WHERE J.category = c.idcategory AND j.idjournal = t.idtransactionType;
     END //
@@ -27,9 +27,9 @@ call get_from_journal_by_id(1);
 DELIMITER //
 CREATE PROCEDURE get_journal_from_month(IN D DATETIME)
 	BEGIN
-		SELECT j.idjournal, j.date, j.amount, c.name AS 'categoryname', t.name AS 'transactionname' 
+		SELECT j.idjournal, j.date, j.amount, j.description, c.name AS 'categoryname', t.name AS 'transactionname' 
         FROM journal j, category c, transactiontype t
-        WHERE j.category = c.idcategory AND j.idjournal = t.idtransactionType AND MONTH(j.date) = MONTH(D) AND YEAR(j.date) = YEAR(D);
+        WHERE j.category = c.idcategory AND j.transactionid = t.idtransactionType AND MONTH(j.date) = MONTH(D) AND YEAR(j.date) = YEAR(D);
     END //
 DELIMITER ;
 
@@ -38,7 +38,7 @@ DELIMITER //
 CREATE PROCEDURE create_journal(IN D DATETIME, C INTEGER, DES VARCHAR(85), A INTEGER, TID INTEGER)
 	BEGIN
 		INSERT INTO journal(date, category, description, amount, transactionid)
-			VALUES(D, D, DES, A, TID);
+			VALUES(D, C, DES, A, TID);
     END //
 DELIMITER ;
 

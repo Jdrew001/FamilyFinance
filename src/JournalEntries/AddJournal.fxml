@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="545.0" prefWidth="874.0" style="-fx-background-color: #2c3e50;" stylesheets="@../Resources/stylesheet.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JournalEntries.AddJournalController">
+   <children>
+      <JFXTextField fx:id="amountTxt" alignment="CENTER" focusColor="#3498db" layoutX="81.0" layoutY="113.0" prefHeight="54.0" prefWidth="325.0" promptText="   Amount" style="-fx-text-fill: #3498db; -fx-prompt-text-fill: #2980b9;" unFocusColor="#2980b9" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="113.0">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </JFXTextField>
+      <Label fx:id="headerTxt" alignment="CENTER" layoutX="322.0" layoutY="14.0" prefHeight="99.0" prefWidth="231.0" text="Add Journal Entry" textFill="#3498db" AnchorPane.leftAnchor="322.0" AnchorPane.rightAnchor="321.0" AnchorPane.topAnchor="14.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <JFXDatePicker fx:id="transactionDatePicker" defaultColor="#2980b9" layoutX="275.0" layoutY="326.0" prefHeight="54.0" prefWidth="324.0" style="-fx-text-fill: white;" stylesheets="@../Resources/stylesheet.css" AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="275.0" AnchorPane.topAnchor="326.0" />
+      <JFXButton fx:id="submitBtn" layoutX="245.0" layoutY="405.0" onAction="#submitBtnPressed" prefHeight="54.0" prefWidth="317.0" text="Submit" textFill="#3498db" AnchorPane.leftAnchor="245.0" AnchorPane.rightAnchor="245.0" AnchorPane.topAnchor="405.0" />
+      <JFXButton fx:id="cancelBtn" layoutX="245.0" layoutY="470.0" prefHeight="54.0" prefWidth="348.0" text="Cancel" textFill="#3498db" AnchorPane.leftAnchor="245.0" AnchorPane.rightAnchor="245.0" AnchorPane.topAnchor="460.0" />
+      <ComboBox fx:id="categoryDropdown" layoutX="101.0" layoutY="199.0" prefHeight="54.0" prefWidth="324.0" style="-fx-text-fill: white;" stylesheets="@../Resources/stylesheet.css" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="449.0" />
+      <JFXTextField fx:id="descriptionTxt" alignment="CENTER" focusColor="#3498db" layoutX="460.0" layoutY="113.0" prefHeight="54.0" prefWidth="325.0" promptText="   Description" style="-fx-text-fill: #3498db; -fx-prompt-text-fill: #2980b9;" unFocusColor="#2980b9" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="113.0">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </JFXTextField>
+      <ComboBox fx:id="transactionType" layoutX="465.0" layoutY="199.0" prefHeight="54.0" prefWidth="324.0" style="-fx-text-fill: white;" stylesheets="@../Resources/stylesheet.css" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="199.0" />
+   </children>
+</AnchorPane>

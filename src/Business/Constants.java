@@ -31,6 +31,7 @@ public class Constants {
 
     //journal entries
     public static final String idJournal = "idJournal";
+    public static final String description = "description";
 
     //Transactions
     public static final int debit = 1;

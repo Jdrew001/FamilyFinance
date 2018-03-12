@@ -1,0 +1,23 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" build-on-make="true" name="FamilyFinance">
+    <output-path>$PROJECT_DIR$/out/artifacts/FamilyFinance</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="login.Main" />
+        <option name="description" value="" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="title" value="Family Finance" />
+        <option name="vendor" value="dtatkison" />
+        <option name="version" value="1.0.0" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="FamilyFinance.jar">
+        <element id="module-output" name="FamilyFinance" />
+        <element id="file-copy" path="$USER_HOME$/Downloads/jfoenix-8.0.1.jar" />
+        <element id="file-copy" path="$USER_HOME$/Desktop/mysql-connector-java-5.1.45-bin.jar" />
+        <element id="file-copy" path="$USER_HOME$/Desktop/reactfx-2.0-M5.jar" />
+      </element>
+    </root>
+  </artifact>
+</component>

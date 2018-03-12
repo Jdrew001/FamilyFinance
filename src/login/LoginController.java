@@ -44,7 +44,7 @@ public class LoginController implements Initializable {
             try {
 
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("../Summary/Summary.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/Summary/Summary.fxml"));
                 /*
                  * if "fx:controller" is not set in fxml
                  * fxmlLoader.setController(NewWindowController);

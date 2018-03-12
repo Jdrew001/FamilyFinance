@@ -92,7 +92,7 @@ public class AddExpenseController implements Initializable {
             } else {
                 try {
                     if(expenseRepository.addExpense(Double.parseDouble(amountTxt.getText()), cat.getId(),
-                            Date.from(expenseDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), UserProperties.userId, Constants.credit))
+                            Date.from(expenseDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), UserProperties.userId, Constants.debit))
                     {
                         submitBtn.getScene().getWindow().hide();
                         UpdateExpense.newExpense = true;

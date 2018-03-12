@@ -52,7 +52,7 @@ public class AddIncomeController implements Initializable {
     }
 
     //load choice box
-    public void loadChoiceBox()
+    private void loadChoiceBox()
     {
         //load in all the categories
         categoryDropdown.setItems(categoryRepository.getAllCategories());

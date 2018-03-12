@@ -103,7 +103,7 @@ public class IncomeController implements Initializable {
     private void addNewIncome(ActionEvent e) {
         if (e.getSource().equals(addIncome)) {
             SceneChanger sceneChanger = new SceneChanger();
-            sceneChanger.showPrompt("../Income/AddIncome.fxml", "Add Income", addIncome);
+            sceneChanger.showPrompt(AddIncomeController.class.getResource("AddIncome.fxml"), "Add Income", addIncome);
 
             refreshTableDynamically();
         }

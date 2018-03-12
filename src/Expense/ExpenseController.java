@@ -125,7 +125,7 @@ public class ExpenseController implements Initializable {
     @FXML
     public void clickExpenseTableItem(MouseEvent event) {
         if (event.getClickCount() == 1) {
-            Income.class.cast(expenseTable.getSelectionModel().getSelectedItem());
+            Expense.class.cast(expenseTable.getSelectionModel().getSelectedItem());
         } else if (event.getClickCount() == 2) {
             handleDeletionIncome();
         }
@@ -135,7 +135,7 @@ public class ExpenseController implements Initializable {
     private void addNewExpense(ActionEvent e) {
         if(e.getSource().equals(addExpense)) {
             SceneChanger sceneChanger = new SceneChanger();
-            sceneChanger.showPrompt("../Expense/AddExpense.fxml", "Add Expense", addExpense);
+            sceneChanger.showPrompt(AddExpenseController.class.getResource("AddExpense.fxml"), "Add Expense", addExpense);
 
             refreshTableDynamically();
         }
@@ -169,7 +169,7 @@ public class ExpenseController implements Initializable {
         if(AlertHelper.showConfirmationDialog("Delete Confirmation",null, "Are you sure you want to delete this entry?"))
         {
             // Remove income and update table
-            removeIncome(Income.class.cast(expenseTable.getSelectionModel().getSelectedItem()).getIdIncome());
+            removeIncome(Expense.class.cast(expenseTable.getSelectionModel().getSelectedItem()).getIdExpense());
             expenseTable.getColumns().clear();
             Date date = Date.from(expenseDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             initializeTable(expenseTable, loadExpense(date));
