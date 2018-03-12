@@ -15,8 +15,8 @@
       <element id="archive" name="FamilyFinance.jar">
         <element id="module-output" name="FamilyFinance" />
         <element id="file-copy" path="$USER_HOME$/Downloads/jfoenix-8.0.1.jar" />
-        <element id="file-copy" path="$USER_HOME$/Desktop/mysql-connector-java-5.1.45-bin.jar" />
-        <element id="file-copy" path="$USER_HOME$/Desktop/reactfx-2.0-M5.jar" />
+        <element id="file-copy" path="Z:/Oracle/msql/mysql-connector-java-5.1.45/mysql-connector-java-5.1.45-bin.jar" />
+        <element id="file-copy" path="Z:/ProgrammingTools/reactfx-2.0-M5.jar" />
       </element>
     </root>
   </artifact>
