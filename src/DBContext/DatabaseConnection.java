@@ -1,24 +1,36 @@
 package DBContext;
 
-import Business.AlertHelper;
-
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Properties;
 
 public class DatabaseConnection {
 
-    public static Connection dbConnection()
-    {
+    public static Connection dbConnection() {
         Connection conn = null;
+        Properties properties = new Properties();
+        InputStream input = null;
 
         try {
-            //conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/FamilyFinance", "dtatkison", "Onegodchurch1");
-            //conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/FamilyFinance", "root", "Onegodchurch1");
-            conn = DriverManager.getConnection("jdbc:mysql://sql9.freemysqlhosting.net:3306/sql9226214", "sql9226214", "ZSeD3MwahJ");
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
+            input = DatabaseConnection.class.getResourceAsStream("/Resources/config.properties");
+            properties.load(input);
 
+            conn = DriverManager.getConnection(properties.getProperty("localUrl"), properties.getProperty("user"), properties.getProperty("password"));
+            //conn = DriverManager.getConnection(properties.getProperty("ProductionDatabase"), properties.getProperty("user"), properties.getProperty("password"));
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(input != null) {
+                try {
+                    input.close();
+                } catch(IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
         return conn;
     }
 
