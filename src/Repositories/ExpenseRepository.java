@@ -14,7 +14,7 @@ import javafx.collections.ObservableList;
 import java.sql.SQLException;
 import java.util.Date;
 
-//testing 
+
 public class ExpenseRepository extends BaseRepository
 {
     ObservableList<Expense> expenses = FXCollections.observableArrayList();
