@@ -32,14 +32,19 @@ public class BudgetController implements Initializable {
     @FXML
     public JFXTreeTableView<BudgetItems> budgetTable;
 
+    @FXML
+    public JFXButton addBudget;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        checkForBudget();
         expensesAddedUp = expenseRepository.addUpExpensesCategoriesMonthly(new Date());
         initilizeTableView();
     }
 
     private void initilizeTableView()
     {
+
         budgets = budgetRepository.getBudgetItemsForMonth(new Date());
         budgetTable.setColumnResizePolicy(new Callback<TreeTableView.ResizeFeatures, Boolean>() {
             @Override
@@ -56,6 +61,7 @@ public class BudgetController implements Initializable {
             else return categoryCol.getComputedValue(param);
         });
         categoryCol.setMinWidth(200);
+        categoryCol.setSortable(false);
 
         //Progress Bar
         JFXTreeTableColumn progressBarCol = new JFXTreeTableColumn("Progress");
@@ -79,19 +85,19 @@ public class BudgetController implements Initializable {
                     }
                 });
 
-        JFXTreeTableColumn<BudgetItems, Number> remainingCol = new JFXTreeTableColumn<>("Remaining");
+        JFXTreeTableColumn<BudgetItems, Number> remainingCol = new JFXTreeTableColumn<>("Spent");
         remainingCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<BudgetItems, Number> param) ->{
             if(remainingCol.validateValue(param))
             {
                 if(categoryExpensed().get(param.getValue().getValue().getCategory().getName()) != null) {
-                    return param.getValue().getValue().getAmountProperty()
-                            .subtract(categoryExpensed().get(param.getValue().getValue().getCategory().getName()));
+                    return categoryExpensed().get(param.getValue().getValue().getCategory().getName());
                 } else {
-                    return param.getValue().getValue().getAmountProperty();
+                    return new SimpleDoubleProperty(0.00);
                 }
             }
             else return remainingCol.getComputedValue(param);
         });
+        remainingCol.setSortable(false);
 
 
         JFXTreeTableColumn<BudgetItems, Number> budgetedAmount = new JFXTreeTableColumn<>("Budgeted");
@@ -99,6 +105,7 @@ public class BudgetController implements Initializable {
             if(budgetedAmount.validateValue(param)) return param.getValue().getValue().getAmountProperty();
             else return budgetedAmount.getComputedValue(param);
         });
+        budgetedAmount.setSortable(false);
 
 
         final TreeItem<BudgetItems> root = new RecursiveTreeItem<BudgetItems>(budgets, RecursiveTreeObject::getChildren);
@@ -107,28 +114,12 @@ public class BudgetController implements Initializable {
         budgetTable.setShowRoot(false);
         categoryCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.25));
         progressBarCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.25));
-        progressBarCol
         remainingCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.25));
         budgetedAmount.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.25));
         categoryExpensed();
 
     }
 
-    /*
-    * get all expense for the month.
-    * Loop through the categories that have been added to a budget
-    * Create a dictionary - what you need is to have the key = to the category name \n
-    *                           value = to the amount you have spent in expenses for that category
-    *
-    * Once that is complete then you can substract each value from that key value expensed dictionary
-    *
-    *
-    *
-    *   Map<String, String> map = new HashMap<String, String>();
-        map.put("dog", "type of animal");
-        System.out.println(map.get("dog"));
-
-    * */
     private Map<String, DoubleProperty> categoryExpensed()
     {
         Map<String, DoubleProperty> expenses = new HashMap<String, DoubleProperty>();
@@ -140,10 +131,22 @@ public class BudgetController implements Initializable {
         return expenses;
     }
 
+    private void checkForBudget()
+    {
+        System.out.println(budgetRepository.getBudgetFromMonth(new Date()));
+        if(budgetRepository.getBudgetFromMonth(new Date()) != null)
+        {
+            addBudget.setVisible(false);
+        } else {
+            addBudget.setVisible(true);
+        }
+    }
+
     class ProgressCell extends JFXTreeTableCell {
         JFXProgressBar bar = new JFXProgressBar();
         public ProgressCell() {
             bar.setPrefWidth(300);
+            bar.setStyle("-fx-background-color: #2980b9");
         }
 
         @Override
@@ -166,8 +169,6 @@ public class BudgetController implements Initializable {
         public void setProgress(double progress) {
             bar.setProgress(progress);
         }
-
-
     }
 }
 

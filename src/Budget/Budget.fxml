@@ -22,7 +22,7 @@
             </Label>
          </center>
       </JFXToolbar>
-      <JFXTreeTableView fx:id="budgetTable" layoutX="6.0" layoutY="162.0" prefHeight="568.0" prefWidth="1019.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="160.0" />
+      <JFXTreeTableView fx:id="budgetTable" currentItemsCount="1" layoutX="6.0" layoutY="162.0" prefHeight="568.0" prefWidth="1019.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="160.0" />
       <JFXButton fx:id="addBudget" alignment="CENTER" graphicTextGap="10.0" layoutX="906.0" layoutY="104.0" prefHeight="47.0" prefWidth="115.0" text="Add" textFill="#3498db" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="104.0">
          <graphic>
             <ImageView fx:id="addExpenses" fitHeight="36.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">

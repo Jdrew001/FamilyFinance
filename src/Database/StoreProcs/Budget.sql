@@ -13,7 +13,7 @@ CREATE PROCEDURE get_budget_from_month(IN d DATE)
 	BEGIN
 		SELECT b.idBudget, b.date
         FROM budget b
-        WHERE b.date = d;
+        WHERE MONTH(b.date) = MONTH(d) AND YEAR(b.date) = YEAR(d);
     END //
 DELIMITER ;
 
@@ -43,20 +43,28 @@ CREATE PROCEDURE get_budget_items_for_month(IN d DATE)
 	BEGIN
 		SELECT bc.id, b.idBudget, b.date, bc.amount, c.idcategory, c.name as 'categoryname'
         FROM budget b, budgetcategory bc, category c
-        WHERE b.idbudget = bc.idBudget AND c.idcategory = bc.idCategory AND MONTH(b.date) = MONTH(d) AND YEAR(b.date) = YEAR(d);
-    END //
-DELIMITER ;
-
-DELIMITER //
-CREATE PROCEDURE get_budget_categories_for_month(IN d DATE)
-	BEGIN
-		SELECT b.idBudget, c.idcategory, c.name as 'categoryname'
-        FROM budget b, budgetcategory bc, category c
-        WHERE b.idBudget = bc.idBudget AND c.idCategory = bc.idCategory AND MONTH(b.date) = MONTH(d) AND YEAR(b.date) = YEAR(d);
+        WHERE b.idbudget = bc.idBudget AND c.idcategory = bc.idCategory AND MONTH(b.date) = MONTH(d) AND YEAR(b.date) = YEAR(d)
+        ORDER BY c.name;
     END //
 DELIMITER ;
 
 call get_budget_items_for_month('2018-03-01');
+
+DELIMITER //
+CREATE PROCEDURE get_budget_categories_for_month(IN d DATE)
+	BEGIN
+		SELECT b.idBudget, c.idcategory, c.name as 'categoryname', bc.amount
+        FROM budget b, budgetcategory bc, category c
+        WHERE b.idBudget = bc.idBudget AND c.idCategory = bc.idCategory AND MONTH(b.date) = MONTH(d) AND YEAR(b.date) = YEAR(d)
+        ;
+    END //
+DELIMITER ;
+
+call get_budget_categories_for_month('2018-03-01')
+call get_expense_by_month('2018-03-01')
+
+call get_budget_items_for_month('2018-03-01');
+call get_budget_from_month('2018-03-11');
 
 -- get budget item by id
 DELIMITER //
@@ -77,7 +85,7 @@ CREATE PROCEDURE create_budget_item(IN amount DOUBLE, idBudget INT, idCategory I
     END //
 DELIMITER ;
 
-call create_budget_item(50.00, 2, 14);
+call create_budget_item(400.00, 2, 5);
 call get_all_categories();
 
 -- update budget item
@@ -99,9 +107,9 @@ CREATE PROCEDURE delete_budget_item(IN id INT)
     END //
 DELIMITER ;
 
-call delete_budget_item(2);
+call delete_budget_item(6);
 
-call update_budget_item(300.10, 7, 2);
+call update_budget_item(400, 11, 5);
 
 
 call get_budget_items_for_month('2018-03-01');
