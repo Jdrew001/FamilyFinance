@@ -1,5 +1,6 @@
 package Repositories;
 
+import Models.BudgetItems;
 import Business.AlertHelper;
 import DBContext.DatabaseConnection;
 import Models.Budget;
@@ -7,13 +8,13 @@ import Models.Category;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import javax.xml.crypto.Data;
 import java.sql.SQLException;
 import java.util.Date;
 
 public class BudgetRepository extends BaseRepository {
 
     ObservableList<Budget> budgets = FXCollections.observableArrayList();
+    ObservableList<BudgetItems> budgetItems = FXCollections.observableArrayList();
 
     //get all budgets
     public ObservableList<Budget> getAllBudgets() {
@@ -124,13 +125,14 @@ public class BudgetRepository extends BaseRepository {
     }
 
     //get budget items for month
-    public ObservableList<Budget> getBudgetItemsForMonth(Date date)
+    public ObservableList<BudgetItems> getBudgetItemsForMonth(Date date)
     {
         try {
             conn = DatabaseConnection.dbConnection();
             statement = conn.prepareCall("{ call get_budget_items_for_month(?)}");
             statement.setDate(1, new java.sql.Date(date.getTime()));
             statement.execute();
+            result = statement.getResultSet();
 
             setBudgetItem();
 
@@ -140,7 +142,32 @@ public class BudgetRepository extends BaseRepository {
                 e.printStackTrace();
             }
 
-            return budgets;
+            return budgetItems;
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
+    }
+
+    //get budget categories in month
+    public ObservableList<BudgetItems> getBudgetCategoriesForMonth(Date date) {
+        try {
+            conn = DatabaseConnection.dbConnection();
+            statement = conn.prepareCall("{ call get_budget_categories_for_month(?)}");
+            statement.setDate(1, new java.sql.Date(date.getTime()));
+            statement.execute();
+            result = statement.getResultSet();
+
+            setBudgetCategoryItem();
+
+            try {
+                close(conn, statement, result);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+
+            return budgetItems;
         } catch(SQLException ex) {
             ex.printStackTrace();
         }
@@ -272,7 +299,21 @@ public class BudgetRepository extends BaseRepository {
         try {
             while(result.next())
             {
-                budgets.add(new Budget(result.getInt("id"), result.getInt("idBudget"), result.getDate("date"), result.getDouble("amount"),
+                budgetItems.add(new BudgetItems(result.getInt("id"), result.getInt("idBudget"),
+                        result.getDate("date"), result.getDouble("amount"),
+                        new Category(result.getInt("idcategory"), result.getString("categoryname"))));
+            }
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void setBudgetCategoryItem()
+    {
+        try {
+            while(result.next())
+            {
+                budgetItems.add(new BudgetItems(result.getInt("idBudget"), result.getDouble("amount"),
                         new Category(result.getInt("idcategory"), result.getString("categoryname"))));
             }
         } catch(SQLException ex) {

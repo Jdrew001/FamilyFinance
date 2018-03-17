@@ -59,7 +59,7 @@ CREATE PROCEDURE get_expense_by_month(IN D DATE)
 DELIMITER ;
 
 
-call get_income_by_month('2018-02-23');
+call get_income_by_month('');
 
 -- get income by id
 DELIMITER //
@@ -143,6 +143,18 @@ CREATE PROCEDURE update_expense(IN A INTEGER, C INTEGER, D DATETIME, UID INTEGER
         WHERE e.idexpense = ID;
     END //
 DELIMITER ;
+
+-- get all expenses with the categories added up
+DELIMITER //
+CREATE PROCEDURE add_up_categories_in_month(IN d DATE)
+	BEGIN
+		SELECT e.categoryid, c.name as 'categoryname', sum(e.amount) as total from expense e, category c
+	WHERE e.categoryid = c.idcategory AND MONTH(date) = MONTH(d) AND YEAR(date) = YEAR(d) AND categoryid = categoryid
+	group by categoryid;
+    END //
+DELIMITER ;
+
+call add_up_categories_in_month('2018-02-01');
 
 call get_all_income();
 call get_all_expense();

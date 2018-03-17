@@ -1,5 +1,6 @@
 package Summary;
 
+import Budget.BudgetController;
 import Business.AlertHelper;
 import Business.SceneChanger;
 import Category.CategoryController;
@@ -40,14 +41,14 @@ public class SummaryController implements Initializable {
     SceneChanger sceneChanger = new SceneChanger();
 
     @FXML
-    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, categoriesBtn, summaryBtn, refreshBtn;
+    JFXButton logoutBtn, incomeBtn, expensesBtn, journalBtn, budgetGoalsBtn, categoriesBtn, summaryBtn, refreshBtn;
 
     @FXML
     Label beginningBalLbl, totalIncomeLbl, totalExpenseLbl, totalSavingsLbl, cashBalLbl;
 
     //panes
     @FXML
-    AnchorPane summaryPane, categoryPane;
+    AnchorPane summaryPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -98,6 +99,8 @@ public class SummaryController implements Initializable {
             sceneChanger.showPrompt(ExpenseController.class.getResource("Expense.fxml"), "Expense", expensesBtn);
         } else if(e.getSource() == journalBtn) {
             sceneChanger.showPrompt(JournalEntriesController.class.getResource("JournalEntries.fxml"), "Journal Entries", journalBtn);
+        } else if(e.getSource() == budgetGoalsBtn) {
+            sceneChanger.showPrompt(BudgetController.class.getResource("Budget.fxml"), "Budget Goals", budgetGoalsBtn);
         }
     }
 

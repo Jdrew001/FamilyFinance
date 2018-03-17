@@ -18,6 +18,7 @@ import java.util.Date;
 public class ExpenseRepository extends BaseRepository
 {
     ObservableList<Expense> expenses = FXCollections.observableArrayList();
+    ObservableList<ExpensesAddedUp> expensesAddedUps = FXCollections.observableArrayList();
 
     //get all expenses
     public ObservableList<Expense> getAllExpenses() {
@@ -193,6 +194,34 @@ public class ExpenseRepository extends BaseRepository
         return true;
     }
 
+    //get added up expenses per category in a month
+    public ObservableList<ExpensesAddedUp> addUpExpensesCategoriesMonthly(Date date) {
+
+        try {
+            conn = DatabaseConnection.dbConnection();
+            statement = conn.prepareCall(" { call add_up_categories_in_month(?) } ");
+            statement.setDate(1, new java.sql.Date(date.getTime()));
+            statement.execute();
+            result = statement.getResultSet();
+
+            setAddedExpenses();
+
+
+            try {
+                close(conn, statement, result);
+            } catch(Exception e) {
+                e.printStackTrace();
+                AlertHelper.showExceptionDialog("Exception", null, "Error in Expense", e);
+            }
+
+            return expensesAddedUps;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private void setExpense() {
 
         try {
@@ -208,5 +237,17 @@ public class ExpenseRepository extends BaseRepository
             System.out.println(e);
         }
 
+    }
+
+    private void setAddedExpenses()
+    {
+        try {
+            while(result.next())
+            {
+                expensesAddedUps.add(new ExpensesAddedUp(new Category(result.getInt("categoryid"), result.getString("categoryname")), result.getDouble("total")));
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -171,7 +171,8 @@ public class ExpenseController implements Initializable {
             // Remove income and update table
             removeIncome(Expense.class.cast(expenseTable.getSelectionModel().getSelectedItem()).getIdExpense());
             expenseTable.getColumns().clear();
-            initializeTable(expenseTable, loadExpense(new Date()));
+            Date date = Date.from(expenseDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            initializeTable(expenseTable, loadExpense(date));
         }
     }
 
