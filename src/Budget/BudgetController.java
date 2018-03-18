@@ -145,10 +145,11 @@ public class BudgetController implements Initializable {
         budgetTable.getColumns().addAll(categoryCol, progressBarCol, remainingCol, budgetedAmount);
         budgetTable.setRoot(root);
         budgetTable.setShowRoot(false);
-        categoryCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.24));
-        progressBarCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.24));
-        remainingCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.24));
-        budgetedAmount.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.24));
+        budgetTable.setColumnResizePolicy(JFXTreeTableView.CONSTRAINED_RESIZE_POLICY);
+        categoryCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.25));
+        progressBarCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.25));
+        remainingCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.25));
+        budgetedAmount.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.25));
         categoryExpensed();
 
     }
