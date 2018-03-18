@@ -33,19 +33,50 @@ public class BudgetController implements Initializable {
     public JFXTreeTableView<BudgetItems> budgetTable;
 
     @FXML
+    public Label totalRemainingTxt, totalSpentTxt, totalBudgetTxt;
+
+    @FXML
     public JFXButton addBudget;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         checkForBudget();
         expensesAddedUp = expenseRepository.addUpExpensesCategoriesMonthly(new Date());
+        budgets = budgetRepository.getBudgetItemsForMonth(new Date());
         initilizeTableView();
+        initilizeBottomBar();
+    }
+
+    private void initilizeBottomBar()
+    {
+        double totalAmount = 0.0;
+        double totalBudget = 0.0;
+        double totalRemaining = 0.0;
+        for(ExpensesAddedUp ex : expensesAddedUp)
+        {
+            totalAmount += ex.getTotal();
+        }
+
+        for(BudgetItems b : budgets)
+        {
+            totalBudget += b.getAmount();
+        }
+
+        totalRemaining = totalBudget - totalAmount;
+        totalSpentTxt.setText(String.format("($%.2f)", totalAmount));
+
+
+        if(totalRemaining < 0)
+        {
+            totalRemainingTxt.setText(String.format("($%.2f)", totalRemaining));
+        } else {
+            totalRemainingTxt.setText(String.format("$%.2f", totalRemaining));
+        }
+        totalBudgetTxt.setText(String.format("$%.2f", totalBudget));
     }
 
     private void initilizeTableView()
     {
-
-        budgets = budgetRepository.getBudgetItemsForMonth(new Date());
         budgetTable.setColumnResizePolicy(new Callback<TreeTableView.ResizeFeatures, Boolean>() {
             @Override
             public Boolean call(TreeTableView.ResizeFeatures param) {
@@ -89,6 +120,8 @@ public class BudgetController implements Initializable {
         remainingCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<BudgetItems, Number> param) ->{
             if(remainingCol.validateValue(param))
             {
+
+
                 if(categoryExpensed().get(param.getValue().getValue().getCategory().getName()) != null) {
                     return categoryExpensed().get(param.getValue().getValue().getCategory().getName());
                 } else {
@@ -112,10 +145,10 @@ public class BudgetController implements Initializable {
         budgetTable.getColumns().addAll(categoryCol, progressBarCol, remainingCol, budgetedAmount);
         budgetTable.setRoot(root);
         budgetTable.setShowRoot(false);
-        categoryCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.25));
-        progressBarCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.25));
-        remainingCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.25));
-        budgetedAmount.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.25));
+        categoryCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.24));
+        progressBarCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.24));
+        remainingCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.24));
+        budgetedAmount.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.24));
         categoryExpensed();
 
     }
