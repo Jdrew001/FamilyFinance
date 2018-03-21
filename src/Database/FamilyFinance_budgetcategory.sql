@@ -1,10 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `familyfinance` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `familyfinance`;
--- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.17, for macos10.12 (x86_64)
 --
--- Host: localhost    Database: familyfinance
+-- Host: 127.0.0.1    Database: FamilyFinance
 -- ------------------------------------------------------
--- Server version	5.7.21-log
+-- Server version	5.7.21
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -18,27 +16,33 @@ USE `familyfinance`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `category`
+-- Table structure for table `budgetcategory`
 --
 
-DROP TABLE IF EXISTS `category`;
+DROP TABLE IF EXISTS `budgetcategory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `category` (
-  `idcategory` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`idcategory`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+CREATE TABLE `budgetcategory` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `amount` double NOT NULL,
+  `idBudget` int(11) NOT NULL,
+  `idCategory` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idBudget_idx` (`idBudget`),
+  KEY `idCategory_idx` (`idCategory`),
+  CONSTRAINT `idBudget` FOREIGN KEY (`idBudget`) REFERENCES `Budget` (`idBudget`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `idCategory` FOREIGN KEY (`idCategory`) REFERENCES `category` (`idcategory`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `category`
+-- Dumping data for table `budgetcategory`
 --
 
-LOCK TABLES `category` WRITE;
-/*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (2,'gas'),(3,'Food and Groceries'),(4,'Cell phone'),(5,'Food and Groceries'),(6,'Car payment'),(7,'Auto expenses'),(10,'Auto Insurance'),(11,'Shopping'),(12,'Entertainment'),(13,'Personal Care'),(14,'Health'),(15,'Miscellaneous'),(16,'Uncategorized (Atm)'),(18,'Payday'),(20,'auto expenses'),(21,'auto');
-/*!40000 ALTER TABLE `category` ENABLE KEYS */;
+LOCK TABLES `budgetcategory` WRITE;
+/*!40000 ALTER TABLE `budgetcategory` DISABLE KEYS */;
+INSERT INTO `budgetcategory` VALUES (3,300,2,7),(4,100,2,2),(5,400,2,11),(7,400,2,5);
+/*!40000 ALTER TABLE `budgetcategory` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-05 13:34:00
+-- Dump completed on 2018-03-20 21:01:06

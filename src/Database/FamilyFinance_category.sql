@@ -16,35 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `journal`
+-- Table structure for table `category`
 --
 
-DROP TABLE IF EXISTS `journal`;
+DROP TABLE IF EXISTS `category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `journal` (
-  `idjournal` int(11) NOT NULL AUTO_INCREMENT,
-  `date` datetime NOT NULL,
-  `category` int(11) NOT NULL,
-  `description` varchar(85) DEFAULT NULL,
-  `amount` decimal(65,2) NOT NULL,
-  `transactionid` int(11) NOT NULL,
-  PRIMARY KEY (`idjournal`),
-  KEY `categoryid_idx` (`category`),
-  KEY `traid_idx` (`transactionid`),
-  CONSTRAINT `catid` FOREIGN KEY (`category`) REFERENCES `category` (`idcategory`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `traid` FOREIGN KEY (`transactionid`) REFERENCES `transactiontype` (`idtransactionType`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+CREATE TABLE `category` (
+  `idcategory` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`idcategory`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `journal`
+-- Dumping data for table `category`
 --
 
-LOCK TABLES `journal` WRITE;
-/*!40000 ALTER TABLE `journal` DISABLE KEYS */;
-INSERT INTO `journal` VALUES (1,'2018-02-13 00:00:00',2,'This is a description of the purchase',85.00,2),(2,'2018-02-13 00:00:00',2,'This is a description of the purchase',85.00,1),(5,'2018-01-13 00:00:00',2,'This is a description of the purchase',85.00,1),(8,'2018-02-14 00:00:00',18,'asdf',98.00,2),(10,'2018-03-29 00:00:00',18,'Hello',100.00,2),(12,'2018-03-11 00:00:00',2,'Gas in car - QT',25.00,1);
-/*!40000 ALTER TABLE `journal` ENABLE KEYS */;
+LOCK TABLES `category` WRITE;
+/*!40000 ALTER TABLE `category` DISABLE KEYS */;
+INSERT INTO `category` VALUES (2,'Gas'),(3,'Food and Groceries'),(4,'Cell phones'),(5,'Food and Groceries'),(6,'Car payment'),(7,'Auto expenses'),(10,'Auto Insurance'),(11,'Shopping'),(13,'Personal Care'),(14,'Health'),(15,'Miscellaneous'),(16,'Uncategorized (A.T.M)'),(18,'Payday');
+/*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -56,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-12  0:36:25
+-- Dump completed on 2018-03-20 21:01:03

@@ -16,27 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `category`
+-- Table structure for table `Budget`
 --
 
-DROP TABLE IF EXISTS `category`;
+DROP TABLE IF EXISTS `Budget`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `category` (
-  `idcategory` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`idcategory`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+CREATE TABLE `Budget` (
+  `idBudget` int(11) NOT NULL AUTO_INCREMENT,
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`idBudget`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `category`
+-- Dumping data for table `Budget`
 --
 
-LOCK TABLES `category` WRITE;
-/*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (2,'gas'),(3,'Food and Groceries'),(4,'Cell phones'),(5,'Food and Groceries'),(6,'Car payment'),(7,'Auto expenses'),(10,'Auto Insurance'),(11,'Shopping'),(13,'Personal Care'),(14,'Health'),(15,'Miscellaneous'),(16,'Uncategorized (A.T.M)'),(18,'Payday'),(20,'auto expensess');
-/*!40000 ALTER TABLE `category` ENABLE KEYS */;
+LOCK TABLES `Budget` WRITE;
+/*!40000 ALTER TABLE `Budget` DISABLE KEYS */;
+INSERT INTO `Budget` VALUES (2,'2018-03-01 00:00:00');
+/*!40000 ALTER TABLE `Budget` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-12  0:36:25
+-- Dump completed on 2018-03-20 21:01:05

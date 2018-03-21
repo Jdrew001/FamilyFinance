@@ -1,10 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `familyfinance` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `familyfinance`;
--- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.17, for macos10.12 (x86_64)
 --
--- Host: localhost    Database: familyfinance
+-- Host: 127.0.0.1    Database: FamilyFinance
 -- ------------------------------------------------------
--- Server version	5.7.21-log
+-- Server version	5.7.21
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -38,7 +36,7 @@ CREATE TABLE `income` (
   CONSTRAINT `categoryIncome` FOREIGN KEY (`category`) REFERENCES `category` (`idcategory`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `transid` FOREIGN KEY (`transactionid`) REFERENCES `transactiontype` (`idtransactionType`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `userId` FOREIGN KEY (`userid`) REFERENCES `user` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,7 +45,7 @@ CREATE TABLE `income` (
 
 LOCK TABLES `income` WRITE;
 /*!40000 ALTER TABLE `income` DISABLE KEYS */;
-INSERT INTO `income` VALUES (8,15.00,2,'2018-02-18',1,2),(9,25.00,2,'2018-02-22',1,2),(10,16.00,2,'2018-02-18',1,2),(11,16.00,2,'2018-02-18',1,2),(12,24.00,2,'2018-02-23',1,2),(14,23.00,2,'2018-02-23',1,2),(15,20.21,2,'2018-02-23',1,2),(16,21.00,2,'2018-02-13',1,2),(17,21.00,2,'2018-02-13',1,2),(28,50.00,5,'2018-02-23',1,2),(29,10.52,2,'2018-02-21',1,2),(31,100.00,18,'2018-02-28',1,2);
+INSERT INTO `income` VALUES (8,15.00,2,'2018-02-18',1,2),(9,25.00,2,'2018-02-22',1,2),(10,16.00,2,'2018-02-18',1,2),(11,16.00,2,'2018-02-18',1,2),(12,24.00,2,'2018-02-23',1,2),(14,23.00,2,'2018-02-23',1,2),(15,20.21,2,'2018-02-23',1,2),(16,21.00,2,'2018-02-13',1,2),(17,21.00,2,'2018-02-13',1,2),(28,50.00,5,'2018-02-23',1,2),(29,10.52,2,'2018-02-21',1,2),(31,100.00,18,'2018-02-28',1,2),(33,43.00,16,'2018-02-28',1,2),(39,98.00,18,'2018-02-14',1,2),(43,3200.00,18,'2018-03-01',1,2);
 /*!40000 ALTER TABLE `income` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -60,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-05 13:34:02
+-- Dump completed on 2018-03-20 21:01:07
