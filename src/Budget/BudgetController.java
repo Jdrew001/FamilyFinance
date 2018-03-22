@@ -1,5 +1,6 @@
 package Budget;
 
+import Business.SceneChanger;
 import Models.BudgetItems;
 import Models.Expense;
 import Repositories.BudgetRepository;
@@ -14,6 +15,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -42,13 +44,23 @@ public class BudgetController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        checkForBudget();
+        //checkForBudget();
         expensesAddedUp = expenseRepository.addUpExpensesCategoriesMonthly(new Date());
         budgets = budgetRepository.getBudgetItemsForMonth(new Date());
         changeItemArrays();
         initilizeVariableTableView();
         initilizeFixedTableView();
         initilizeBottomBar();
+    }
+
+    @FXML
+    public void addNewBudget(ActionEvent e)
+    {
+        if(e.getSource().equals(addBudget))
+        {
+            SceneChanger s = new SceneChanger();
+            s.showPrompt(AddNewBudget.class.getResource("AddNewBudget.fxml"), "New Budget", addBudget);
+        }
     }
 
     private void initilizeBottomBar()
@@ -271,6 +283,8 @@ public class BudgetController implements Initializable {
             addBudget.setVisible(true);
         }
     }
+
+
 
     class ProgressCell extends JFXTreeTableCell {
         JFXProgressBar bar = new JFXProgressBar();
