@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.17, for macos10.12 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: FamilyFinance
+-- Host: localhost    Database: familyfinance
 -- ------------------------------------------------------
--- Server version	5.7.21
+-- Server version	5.7.21-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,7 +16,7 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Dumping routines for database 'FamilyFinance'
+-- Dumping routines for database 'familyfinance'
 --
 /*!50003 DROP PROCEDURE IF EXISTS `add_expense` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -107,12 +107,12 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `create_budget_item`(IN amount DOUBLE, idBudget INT, idCategory INT)
+CREATE DEFINER=`dtatkison`@`%` PROCEDURE `create_budget_item`(IN amount DOUBLE, budgetType VARCHAR(45), idBudget INT, idCategory INT)
 BEGIN
-		INSERT INTO budgetcategory(amount, idBudget, idCategory)
-		VALUES(amount, idBudget, idCategory);
+		INSERT INTO budgetcategory(amount, budgetType, idBudget, idCategory)
+		VALUES(amount, budgetType, idBudget, idCategory);
     END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -469,11 +469,11 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_budget_items_for_month`(IN d DATE)
+CREATE DEFINER=`dtatkison`@`%` PROCEDURE `get_budget_items_for_month`(IN d DATE)
 BEGIN
-		SELECT bc.id, b.idBudget, b.date, bc.amount, c.idcategory, c.name as 'categoryname'
+		SELECT bc.id, b.idBudget, b.date, bc.amount, bc.budgetType, c.idcategory, c.name as 'categoryname'
         FROM budget b, budgetcategory bc, category c
         WHERE b.idbudget = bc.idBudget AND c.idcategory = bc.idCategory AND MONTH(b.date) = MONTH(d) AND YEAR(b.date) = YEAR(d)
         ORDER BY c.name;
@@ -762,12 +762,12 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_budget_item`(IN a DOUBLE, idC INT, id INT)
+CREATE DEFINER=`dtatkison`@`%` PROCEDURE `update_budget_item`(IN a DOUBLE, t VARCHAR(45), idC INT, id INT)
 BEGIN
 		UPDATE budgetcategory
-        SET amount = a, idCategory = idC
+        SET amount = a , budgetTypeId = t, idCategory = idC
         WHERE budgetcategory.id = id;
     END ;;
 DELIMITER ;
@@ -890,4 +890,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-20 21:01:08
+-- Dump completed on 2018-03-22 13:46:35

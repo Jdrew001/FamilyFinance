@@ -41,7 +41,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE get_budget_items_for_month(IN d DATE)
 	BEGIN
-		SELECT bc.id, b.idBudget, b.date, bc.amount, c.idcategory, c.name as 'categoryname'
+		SELECT bc.id, b.idBudget, b.date, bc.amount, bc.budgetType, c.idcategory, c.name as 'categoryname'
         FROM budget b, budgetcategory bc, category c
         WHERE b.idbudget = bc.idBudget AND c.idcategory = bc.idCategory AND MONTH(b.date) = MONTH(d) AND YEAR(b.date) = YEAR(d)
         ORDER BY c.name;
@@ -63,7 +63,7 @@ DELIMITER ;
 call get_budget_categories_for_month('2018-03-01')
 call get_expense_by_month('2018-03-01')
 
-call get_budget_items_for_month('2018-03-01');
+
 call get_budget_from_month('2018-03-11');
 
 -- get budget item by id
@@ -78,25 +78,29 @@ DELIMITER ;
 
 -- add new budget items in a given month
 DELIMITER //
-CREATE PROCEDURE create_budget_item(IN amount DOUBLE, idBudget INT, idCategory INT)
+CREATE PROCEDURE create_budget_item(IN amount DOUBLE, budgetType VARCHAR(45), idBudget INT, idCategory INT)
 	BEGIN
-		INSERT INTO budgetcategory(amount, idBudget, idCategory)
-		VALUES(amount, idBudget, idCategory);
+		INSERT INTO budgetcategory(amount, budgetType, idBudget, idCategory)
+		VALUES(amount, budgetType, idBudget, idCategory);
     END //
 DELIMITER ;
 
-call create_budget_item(400.00, 2, 5);
+call create_budget_item(400.00,'Variable', 2, 5);
 call get_all_categories();
+call delete_budget_item(6);
 
 -- update budget item
 DELIMITER //
-CREATE PROCEDURE update_budget_item(IN a DOUBLE, idC INT, id INT)
+CREATE PROCEDURE update_budget_item(IN a DOUBLE, t VARCHAR(45), idC INT, id INT)
 	BEGIN
 		UPDATE budgetcategory
-        SET amount = a, idCategory = idC
+        SET amount = a , budgetTypeId = t, idCategory = idC
         WHERE budgetcategory.id = id;
     END //
 DELIMITER ;
+
+
+call update_budget_item()
 
 -- delete budget item
 DELIMITER //
@@ -107,8 +111,10 @@ CREATE PROCEDURE delete_budget_item(IN id INT)
     END //
 DELIMITER ;
 
-call delete_budget_item(6);
-
+call delete_budget_item(3);
+call delete_budget_item(7);
+call delete_budget_item(4);
+call delete_budget_item(5);
 call update_budget_item(400, 11, 5);
 
 

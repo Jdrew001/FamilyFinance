@@ -14,20 +14,23 @@ public class BudgetItems extends RecursiveTreeObject<BudgetItems> {
     private int idBudget;
     private double amount;
     private Category category;
+    private String budgetType;
 
     public BudgetItems()
     {
         setId(0);
         setIdBudget(0);
         setAmount(0.0);
+        setBudgetType("");
         setCategory(new Category());
     }
 
-    public BudgetItems(int id, int idBudget, Date date, double amount, Category category)
+    public BudgetItems(int id, int idBudget, Date date, double amount, String budgetType, Category category)
     {
         setId(id);
         setIdBudget(idBudget);
         setAmount(amount);
+        setBudgetType(budgetType);
         setCategory(category);
     }
 
@@ -36,6 +39,7 @@ public class BudgetItems extends RecursiveTreeObject<BudgetItems> {
         setId(0);
         setIdBudget(idBudget);
         setAmount(0.0);
+        setBudgetType("");
         setCategory(new Category());
     }
 
@@ -69,6 +73,16 @@ public class BudgetItems extends RecursiveTreeObject<BudgetItems> {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public void setBudgetType(String b)
+    {
+        budgetType = b;
+    }
+
+    public String getBudgetType()
+    {
+        return budgetType;
     }
 
     public Category getCategory() {

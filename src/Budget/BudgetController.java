@@ -27,10 +27,12 @@ public class BudgetController implements Initializable {
     BudgetRepository budgetRepository = new BudgetRepository();
     ExpenseRepository expenseRepository = new ExpenseRepository();
     ObservableList<BudgetItems> budgets = FXCollections.observableArrayList();
+    ObservableList<BudgetItems> variableItems = FXCollections.observableArrayList();
+    ObservableList<BudgetItems> fixedItems = FXCollections.observableArrayList();
     ObservableList<ExpensesAddedUp> expensesAddedUp = FXCollections.observableArrayList();
 
     @FXML
-    public JFXTreeTableView<BudgetItems> budgetTable;
+    public JFXTreeTableView<BudgetItems> variableTable, fixedTable;
 
     @FXML
     public Label totalRemainingTxt, totalSpentTxt, totalBudgetTxt;
@@ -43,7 +45,9 @@ public class BudgetController implements Initializable {
         checkForBudget();
         expensesAddedUp = expenseRepository.addUpExpensesCategoriesMonthly(new Date());
         budgets = budgetRepository.getBudgetItemsForMonth(new Date());
-        initilizeTableView();
+        changeItemArrays();
+        initilizeVariableTableView();
+        initilizeFixedTableView();
         initilizeBottomBar();
     }
 
@@ -75,16 +79,29 @@ public class BudgetController implements Initializable {
         totalBudgetTxt.setText(String.format("$%.2f", totalBudget));
     }
 
-    private void initilizeTableView()
+    private void changeItemArrays()
     {
-        budgetTable.setColumnResizePolicy(new Callback<TreeTableView.ResizeFeatures, Boolean>() {
+        for(BudgetItems b : budgets)
+        {
+            if(b.getBudgetType().equalsIgnoreCase("variable"))
+            {
+                variableItems.add(b);
+            } else if(b.getBudgetType().equalsIgnoreCase("fixed")) {
+                fixedItems.add(b);
+            }
+        }
+    }
+
+    private void initilizeVariableTableView()
+    {
+        variableTable.setColumnResizePolicy(new Callback<TreeTableView.ResizeFeatures, Boolean>() {
             @Override
             public Boolean call(TreeTableView.ResizeFeatures param) {
                 return true;
             }
         });
 
-        budgetTable.setEditable(false);
+        variableTable.setEditable(false);
 
         JFXTreeTableColumn<BudgetItems, String> categoryCol = new JFXTreeTableColumn<>("Category");
         categoryCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<BudgetItems, String> param) ->{
@@ -141,18 +158,97 @@ public class BudgetController implements Initializable {
         budgetedAmount.setSortable(false);
 
 
-        final TreeItem<BudgetItems> root = new RecursiveTreeItem<BudgetItems>(budgets, RecursiveTreeObject::getChildren);
-        budgetTable.getColumns().addAll(categoryCol, progressBarCol, remainingCol, budgetedAmount);
-        budgetTable.setRoot(root);
-        budgetTable.setShowRoot(false);
-        budgetTable.setColumnResizePolicy(JFXTreeTableView.CONSTRAINED_RESIZE_POLICY);
-        categoryCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.25));
-        progressBarCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.25));
-        remainingCol.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.25));
-        budgetedAmount.prefWidthProperty().bind(budgetTable.widthProperty().multiply(0.25));
+        final TreeItem<BudgetItems> root = new RecursiveTreeItem<BudgetItems>(variableItems, RecursiveTreeObject::getChildren);
+        variableTable.getColumns().addAll(categoryCol, progressBarCol, remainingCol, budgetedAmount);
+        variableTable.setRoot(root);
+        variableTable.setShowRoot(false);
+        variableTable.setColumnResizePolicy(JFXTreeTableView.CONSTRAINED_RESIZE_POLICY);
+        categoryCol.prefWidthProperty().bind(variableTable.widthProperty().multiply(0.25));
+        progressBarCol.prefWidthProperty().bind(variableTable.widthProperty().multiply(0.25));
+        remainingCol.prefWidthProperty().bind(variableTable.widthProperty().multiply(0.25));
+        budgetedAmount.prefWidthProperty().bind(variableTable.widthProperty().multiply(0.25));
         categoryExpensed();
-
     }
+
+    private void initilizeFixedTableView()
+    {
+        fixedTable.setColumnResizePolicy(new Callback<TreeTableView.ResizeFeatures, Boolean>() {
+            @Override
+            public Boolean call(TreeTableView.ResizeFeatures param) {
+                return true;
+            }
+        });
+
+        fixedTable.setEditable(false);
+
+        JFXTreeTableColumn<BudgetItems, String> categoryCol = new JFXTreeTableColumn<>("Category");
+        categoryCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<BudgetItems, String> param) ->{
+            if(categoryCol.validateValue(param)) return param.getValue().getValue().getCategoryName();
+            else return categoryCol.getComputedValue(param);
+        });
+        categoryCol.setMinWidth(200);
+        categoryCol.setSortable(false);
+
+        //Progress Bar
+        JFXTreeTableColumn progressBarCol = new JFXTreeTableColumn("Progress");
+        progressBarCol.setSortable(false);
+        progressBarCol.setCellValueFactory(
+                new Callback<JFXTreeTableColumn.CellDataFeatures<BudgetItems, Boolean>,
+                        ObservableValue<Boolean>>() {
+
+                    @Override
+                    public ObservableValue<Boolean> call(JFXTreeTableColumn.CellDataFeatures<BudgetItems, Boolean> param) {
+                        return new SimpleBooleanProperty(param.getValue() != null);
+                    }
+                });
+
+        progressBarCol.setCellFactory(
+                new Callback<JFXTreeTableColumn<BudgetItems, Boolean>, JFXTreeTableCell>() {
+
+                    @Override
+                    public JFXTreeTableCell call(JFXTreeTableColumn<BudgetItems, Boolean> param) {
+                        return new ProgressCell();
+                    }
+                });
+
+        JFXTreeTableColumn<BudgetItems, Number> remainingCol = new JFXTreeTableColumn<>("Spent");
+        remainingCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<BudgetItems, Number> param) ->{
+            if(remainingCol.validateValue(param))
+            {
+
+
+                if(categoryExpensed().get(param.getValue().getValue().getCategory().getName()) != null) {
+                    return categoryExpensed().get(param.getValue().getValue().getCategory().getName());
+                } else {
+                    return new SimpleDoubleProperty(0.00);
+                }
+            }
+            else return remainingCol.getComputedValue(param);
+        });
+        remainingCol.setSortable(false);
+
+
+        JFXTreeTableColumn<BudgetItems, Number> budgetedAmount = new JFXTreeTableColumn<>("Budgeted");
+        budgetedAmount.setCellValueFactory((TreeTableColumn.CellDataFeatures<BudgetItems, Number> param) ->{
+            if(budgetedAmount.validateValue(param)) return param.getValue().getValue().getAmountProperty();
+            else return budgetedAmount.getComputedValue(param);
+        });
+        budgetedAmount.setSortable(false);
+
+
+        final TreeItem<BudgetItems> root = new RecursiveTreeItem<BudgetItems>(fixedItems, RecursiveTreeObject::getChildren);
+        fixedTable.getColumns().addAll(categoryCol, progressBarCol, remainingCol, budgetedAmount);
+        fixedTable.setRoot(root);
+        fixedTable.setShowRoot(false);
+        fixedTable.setColumnResizePolicy(JFXTreeTableView.CONSTRAINED_RESIZE_POLICY);
+        categoryCol.prefWidthProperty().bind(fixedTable.widthProperty().multiply(0.25));
+        progressBarCol.prefWidthProperty().bind(fixedTable.widthProperty().multiply(0.25));
+        remainingCol.prefWidthProperty().bind(fixedTable.widthProperty().multiply(0.25));
+        budgetedAmount.prefWidthProperty().bind(fixedTable.widthProperty().multiply(0.25));
+        categoryExpensed();
+    }
+
+
 
     private Map<String, DoubleProperty> categoryExpensed()
     {

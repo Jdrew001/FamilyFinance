@@ -300,7 +300,7 @@ public class BudgetRepository extends BaseRepository {
             while(result.next())
             {
                 budgetItems.add(new BudgetItems(result.getInt("id"), result.getInt("idBudget"),
-                        result.getDate("date"), result.getDouble("amount"),
+                        result.getDate("date"), result.getDouble("amount"), result.getString("budgetType"),
                         new Category(result.getInt("idcategory"), result.getString("categoryname"))));
             }
         } catch(SQLException ex) {
